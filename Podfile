@@ -7,8 +7,7 @@ use_frameworks!
 inhibit_all_warnings!
 
 def pods
-    pod 'GzipSwift'
-    pod 'URLRequest-cURL'
+
 end
 
 target 'NetworkInterceptor' do

@@ -1,0 +1,6 @@
+framework module Pods_NetworkInterceptorExample {
+  umbrella header "Pods-NetworkInterceptorExample-umbrella.h"
+
+  export *
+  module * { export * }
+}

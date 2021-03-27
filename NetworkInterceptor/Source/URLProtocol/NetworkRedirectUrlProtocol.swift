@@ -32,7 +32,7 @@ class NetworkRedirectUrlProtocol: URLProtocol {
             return
         }
         #if DEBUG
-            NSLog("Redirected Request CURL => \(redirectedRequest.cURL)")
+            NSLog("Redirected Request CURL => \(redirectedRequest.description)")
         #endif
         redirectedRequest.addValue("true", forHTTPHeaderField: "Redirected")
         

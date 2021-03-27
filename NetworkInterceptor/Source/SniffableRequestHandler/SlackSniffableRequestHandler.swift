@@ -52,7 +52,7 @@ extension SlackSniffableRequestHandler {
         var json = self.generateForwardingJsonBody()
         
         let bundleName = Bundle.main.infoDictionary!["CFBundleName"] as! String
-        let text: String  = originalRequest.cURL
+        let text: String  = originalRequest.description
         json["text"] = "```[\(bundleName)] \(text)```"
         
         let jsonData = try? JSONSerialization.data(withJSONObject: json)

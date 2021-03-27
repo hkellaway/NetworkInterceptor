@@ -1,0 +1,6 @@
+framework module NetworkInterceptor {
+  umbrella header "NetworkInterceptor-umbrella.h"
+
+  export *
+  module * { export * }
+}

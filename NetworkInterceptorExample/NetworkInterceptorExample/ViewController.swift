@@ -20,7 +20,7 @@ class ViewController: UIViewController {
         self.view.addSubview(self.webView)
         self.webView.frame = self.view.bounds
 
-        let urlRequest = URLRequest(url: URL(string: "https://www.antennahouse.com/XSLsample/pdf/sample-link_1.pdf")!)
+        let urlRequest = URLRequest(url: URL(string: "https://www.github.com")!)
         self.webView.loadRequest(urlRequest)
 
 //

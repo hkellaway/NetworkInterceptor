@@ -7,7 +7,6 @@
 //
 
 import Foundation
-import URLRequest_cURL
 
 public enum ConsoleLoggingMode {
     case print, nslog
@@ -23,7 +22,7 @@ public class ConsoleLoggerSniffableRequestHandler: SniffableRequestHandler {
     fileprivate var requestCount: Int = 0
     public func sniffRequest(urlRequest: URLRequest) {
         requestCount = requestCount + 1
-        let loggableText = "Request #\(requestCount): CURL => \(urlRequest.cURL)"
+        let loggableText = "Request #\(requestCount): CURL => \(urlRequest.description)"
         switch self.loggingMode {
         case .nslog:
             NSLog(loggableText)
