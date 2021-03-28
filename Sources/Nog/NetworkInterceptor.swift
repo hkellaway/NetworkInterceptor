@@ -8,19 +8,10 @@
 
 import Foundation
 
-public protocol RequestEvaluator: class {
-    func isActionAllowed(urlRequest: URLRequest) -> Bool
-}
-
-public protocol SniffableRequestHandler {
-    func sniffRequest(urlRequest: URLRequest)
-}
-
 @objc public class NetworkInterceptor: NSObject {
     
     @objc public static let shared = NetworkInterceptor()
     let networkRequestInterceptor = NetworkRequestInterceptor()
-    let sniffer = AnyHttpRequestEvaluator()
     var requestCount = 0
     
     @objc public func startRecording(){
@@ -32,11 +23,13 @@ public protocol SniffableRequestHandler {
     }
     
     func sniffRequest(urlRequest: URLRequest){
-        if sniffer.isActionAllowed(urlRequest: urlRequest) {
-            requestCount = requestCount + 1
-            let loggableText = "Request #\(requestCount): CURL => \(urlRequest.description)"
-            print(loggableText)
+        guard let scheme = urlRequest.url?.scheme,
+              ["https", "http"].contains(scheme) else {
+            return
         }
+        requestCount = requestCount + 1
+        let loggableText = "Request #\(requestCount): CURL => \(urlRequest.description)"
+        print(loggableText)
     }
     
 }

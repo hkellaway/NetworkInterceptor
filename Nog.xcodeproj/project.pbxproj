@@ -8,7 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		DC75BAE626102CA700333C8F /* NetworkRequestSniffableUrlProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC75BAE526102CA700333C8F /* NetworkRequestSniffableUrlProtocol.swift */; };
-		DC75BAEE26102CFD00333C8F /* AnyHttpRequestEvaluator.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC75BAED26102CFD00333C8F /* AnyHttpRequestEvaluator.swift */; };
 		DC86F75726101DC100696363 /* Nog.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC86F75626101DC100696363 /* Nog.swift */; };
 		DC86F76226101E0300696363 /* XCTestManifests.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC86F76026101E0300696363 /* XCTestManifests.swift */; };
 		DC86F76326101E0300696363 /* NogTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC86F76126101E0300696363 /* NogTests.swift */; };
@@ -29,7 +28,6 @@
 
 /* Begin PBXFileReference section */
 		DC75BAE526102CA700333C8F /* NetworkRequestSniffableUrlProtocol.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = NetworkRequestSniffableUrlProtocol.swift; path = Sources/Nog/NetworkRequestSniffableUrlProtocol.swift; sourceTree = "<group>"; };
-		DC75BAED26102CFD00333C8F /* AnyHttpRequestEvaluator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = AnyHttpRequestEvaluator.swift; path = Sources/Nog/AnyHttpRequestEvaluator.swift; sourceTree = "<group>"; };
 		DC86F69826100F3200696363 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = Tests/Info.plist; sourceTree = "<group>"; };
 		DC86F75626101DC100696363 /* Nog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = Nog.swift; path = Sources/Nog/Nog.swift; sourceTree = "<group>"; };
 		DC86F76026101E0300696363 /* XCTestManifests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = XCTestManifests.swift; path = Tests/NogTests/XCTestManifests.swift; sourceTree = "<group>"; };
@@ -72,7 +70,6 @@
 		DC86F76A26101E8400696363 /* Sources */ = {
 			isa = PBXGroup;
 			children = (
-				DC75BAED26102CFD00333C8F /* AnyHttpRequestEvaluator.swift */,
 				DC86F77026101EB400696363 /* NetworkInterceptor.swift */,
 				DC86F76E26101EB400696363 /* NetworkRequestInterceptor.swift */,
 				DC75BAE526102CA700333C8F /* NetworkRequestSniffableUrlProtocol.swift */,
@@ -208,7 +205,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				DC75BAEE26102CFD00333C8F /* AnyHttpRequestEvaluator.swift in Sources */,
 				DC86F77A26101EB400696363 /* NetworkInterceptor.swift in Sources */,
 				DC86F77826101EB400696363 /* NetworkRequestInterceptor.swift in Sources */,
 				DC75BAE626102CA700333C8F /* NetworkRequestSniffableUrlProtocol.swift in Sources */,
