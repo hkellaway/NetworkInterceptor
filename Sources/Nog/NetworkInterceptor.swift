@@ -26,10 +26,10 @@ public protocol RedirectableRequestHandler {
 
 public struct RequestSniffer {
     public let requestEvaluator: RequestEvaluator
-    public let handlers: [SniffableRequestHandler]
-    public init(requestEvaluator: RequestEvaluator, handlers: [SniffableRequestHandler]) {
+    public let loggingMode: ConsoleLoggingMode
+    public init(requestEvaluator: RequestEvaluator, loggingMode: ConsoleLoggingMode) {
         self.requestEvaluator = requestEvaluator
-        self.handlers = handlers
+        self.loggingMode = loggingMode
     }
 }
 
@@ -44,9 +44,14 @@ public struct RequestRedirector {
 
 @objc public class NetworkInterceptor: NSObject {
     
-    @objc public static let shared = NetworkInterceptor()
+    @objc public static let shared = NetworkInterceptor(loggingMode: .print)
     let networkRequestInterceptor = NetworkRequestInterceptor()
+    let consoleLogger: ConsoleLoggerSniffableRequestHandler
     var config: NetworkInterceptorConfig?
+    
+    init(loggingMode: ConsoleLoggingMode) {
+        self.consoleLogger = ConsoleLoggerSniffableRequestHandler(loggingMode: loggingMode)
+    }
     
     public func setup(config: NetworkInterceptorConfig){
         self.config = config
@@ -66,9 +71,7 @@ public struct RequestRedirector {
         }
         for sniffer in config.requestSniffers {
             if sniffer.requestEvaluator.isActionAllowed(urlRequest: urlRequest) {
-                for handler in sniffer.handlers {
-                    handler.sniffRequest(urlRequest: urlRequest)
-                }
+                consoleLogger.sniffRequest(urlRequest: urlRequest)
             }
         }
     }
