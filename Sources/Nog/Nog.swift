@@ -27,32 +27,33 @@
 
 import Foundation
 
-internal extension NotificationCenter {
-    
-    static var _networkLogger = NotificationCenter()
-    
-}
+// MARK: - NetworkLogger
 
-internal extension Notification.Name {
-    
-    static let _logRequest = Notification.Name("NetworkLoggerRequest")
-    
-}
-
+/// Manages whether network logging is on and reactions to network requests.
 public class NetworkLogger {
     
+    // MARK: Public properties
+    
+    /// Whether network logging is currently on.
     public private(set) var isLogging = false
+    
+    // MARK: Private properties
     
     private var requestCount = 0
     
+    // MARK: Init/Deinit
+    
     public init() {
-        NotificationCenter._networkLogger.addObserver(self, selector: #selector(logRequest(_:)), name: ._logRequest, object: nil)
+        NotificationCenter._nog.addObserver(self, selector: #selector(logRequest(_:)), name: ._logRequest, object: nil)
     }
     
     deinit {
-        NotificationCenter._networkLogger.removeObserver(self)
+        NotificationCenter._nog.removeObserver(self)
     }
     
+    // MARK: Public instance functions
+    
+    /// Starts recording of network requests.
     public func start(sessionConfiguration: URLSessionConfiguration = .default) {
         URLProtocol.registerClass(NetworkLoggerUrlProtocol.self)
         swizzleProtocolClasses(sessionConfiguration: sessionConfiguration)
@@ -60,6 +61,7 @@ public class NetworkLogger {
         isLogging = true
     }
     
+    /// Stops recording of networking requests.
     public func stop(sessionConfiguration: URLSessionConfiguration = .default) {
         URLProtocol.unregisterClass(NetworkLoggerUrlProtocol.self)
         swizzleProtocolClasses(sessionConfiguration: sessionConfiguration)
@@ -76,6 +78,8 @@ public class NetworkLogger {
             start(sessionConfiguration: sessionConfiguration)
         }
     }
+    
+    // MARK: Private instance functions
     
     private func swizzleProtocolClasses(sessionConfiguration: URLSessionConfiguration = .default) {
         let sessionConfigurationClass: AnyClass = object_getClass(sessionConfiguration)!
@@ -98,22 +102,7 @@ public class NetworkLogger {
     
 }
 
-extension URLSessionConfiguration {
-    
-    @objc internal func _injectedProtocolClasses() -> [AnyClass]? {
-        guard let injectedProtocolClasses = self._injectedProtocolClasses() else {
-            return []
-        }
-        
-        // Re-insert custom UrlProtocol if needed
-        var protocolClasses = injectedProtocolClasses.filter {
-            return $0 != NetworkLoggerUrlProtocol.self
-        }
-        protocolClasses.insert(NetworkLoggerUrlProtocol.self, at: 0)
-        return protocolClasses
-    }
-    
-}
+// MARK: - NetworkLoggerUrlProtocol
 
 class NetworkLoggerUrlProtocol: URLProtocol {
     
@@ -126,7 +115,7 @@ class NetworkLoggerUrlProtocol: URLProtocol {
             return false
         }
         
-        NotificationCenter._networkLogger.post(name: ._logRequest, object: request)
+        NotificationCenter._nog.post(name: ._logRequest, object: request)
         return false
     }
     
@@ -138,12 +127,41 @@ class NetworkLoggerUrlProtocol: URLProtocol {
     
 }
 
-public struct Nog {
+// MARK: - Extensions
+
+// MARK: URLSessionConfiguration
+
+extension URLSessionConfiguration {
     
-    public init() { }
-    
-    public func speak() -> String {
-        return "Hello World"
+    /// Implementation of `URLSessionConfiguration.protocolClasses` used when
+    /// network logging is on; ensures `NetworkLoggerUrlProtocol` is at
+    /// first position
+    @objc internal func _injectedProtocolClasses() -> [AnyClass]? {
+        guard let injectedProtocolClasses = self._injectedProtocolClasses() else {
+            return []
+        }
+        
+        // Ensure NetworkLoggerUrlProtocol is present and not duplicated
+        var protocolClasses = injectedProtocolClasses.filter {
+            return $0 != NetworkLoggerUrlProtocol.self
+        }
+        protocolClasses.insert(NetworkLoggerUrlProtocol.self, at: 0)
+        return protocolClasses
     }
     
+}
+
+// MARK: NotificationCenter
+
+internal extension NotificationCenter {
+    
+    /// Private NotificationCenter to keep usage of notifications an implementation detail.
+    static var _nog = NotificationCenter()
+    
+}
+
+// MARK: Notification.Name
+
+internal extension Notification.Name {
+    static let _logRequest = Notification.Name("NogNetworkLoggerRequest")
 }
