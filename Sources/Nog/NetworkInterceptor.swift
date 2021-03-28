@@ -72,30 +72,6 @@ public struct RequestRedirector {
         }
     }
     
-    func isRequestRedirectable(urlRequest: URLRequest) -> Bool {
-        guard let config = self.config else {
-            return false
-        }
-        for redirector in config.requestRedirectors {
-            if redirector.requestEvaluator.isActionAllowed(urlRequest: urlRequest) {
-                return true
-            }
-        }
-        return false
-    }
-    
-    func redirectedRequest(urlRequest: URLRequest) -> URLRequest? {
-        guard let config = self.config else {
-            return nil
-        }
-        for redirector in config.requestRedirectors {
-            if redirector.requestEvaluator.isActionAllowed(urlRequest: urlRequest) {
-                return redirector.redirectableRequestHandler.redirectedRequest(originalUrlRequest: urlRequest)
-            }
-        }
-        return nil
-    }
-    
 }
 
 extension NetworkInterceptor: RequestRefirer {

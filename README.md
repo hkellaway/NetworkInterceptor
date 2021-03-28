@@ -1,5 +1,5 @@
 # Nog
 
-A delicious network logger in Swift :coffee:
+A delicious network request logger in Swift :coffee:
 
 :construction: Currently under construction :construction:

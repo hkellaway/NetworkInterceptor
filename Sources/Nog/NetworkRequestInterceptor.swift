@@ -22,13 +22,11 @@ import Foundation
     }
     
     public func startRecording() {
-        URLProtocol.registerClass(NetworkRedirectUrlProtocol.self)
         URLProtocol.registerClass(NetworkRequestSniffableUrlProtocol.self)
         swizzleProtocolClasses()
     }
     
     public func stopRecording() {
-        URLProtocol.unregisterClass(NetworkRedirectUrlProtocol.self)
         URLProtocol.unregisterClass(NetworkRequestSniffableUrlProtocol.self)
         swizzleProtocolClasses()
     }
@@ -37,15 +35,13 @@ import Foundation
 extension URLSessionConfiguration {
     
     @objc func fakeProcotolClasses() -> [AnyClass]? {
-//        return [NetworkRedirectUrlProtocol.self]
         guard let fakeProcotolClasses = self.fakeProcotolClasses() else {
             return []
         }
         var originalProtocolClasses = fakeProcotolClasses.filter {
-            return $0 != NetworkRequestSniffableUrlProtocol.self && $0 != NetworkRedirectUrlProtocol.self
+            return $0 != NetworkRequestSniffableUrlProtocol.self
         }
         originalProtocolClasses.insert(NetworkRequestSniffableUrlProtocol.self, at: 0)
-        originalProtocolClasses.insert(NetworkRedirectUrlProtocol.self, at: 0)
         return originalProtocolClasses
     }
     

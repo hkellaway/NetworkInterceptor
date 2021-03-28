@@ -10,11 +10,8 @@ import Foundation
 
 public struct NetworkInterceptorConfig {
     let requestSniffers: [RequestSniffer]
-    let requestRedirectors: [RequestRedirector]
     
-    public init(requestSniffers: [RequestSniffer] = [],
-                requestRedirectors: [RequestRedirector] = []){
+    public init(requestSniffers: [RequestSniffer] = []){
         self.requestSniffers = requestSniffers
-        self.requestRedirectors = requestRedirectors
     }
 }

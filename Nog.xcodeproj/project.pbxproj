@@ -9,9 +9,7 @@
 /* Begin PBXBuildFile section */
 		DC75BAB426101F5100333C8F /* AnyHttpRequestEvaluator.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC75BAB226101F5100333C8F /* AnyHttpRequestEvaluator.swift */; };
 		DC75BAB526101F5100333C8F /* DomainHttpRequestEvaluator.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC75BAB326101F5100333C8F /* DomainHttpRequestEvaluator.swift */; };
-		DC75BAB926101F5D00333C8F /* AlternateUrlRequestRedirector.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC75BAB826101F5D00333C8F /* AlternateUrlRequestRedirector.swift */; };
-		DC75BACC26101F7F00333C8F /* NetworkRedirectUrlProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC75BACA26101F7F00333C8F /* NetworkRedirectUrlProtocol.swift */; };
-		DC75BACD26101F7F00333C8F /* NetworkRequestSniffableUrlProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC75BACB26101F7F00333C8F /* NetworkRequestSniffableUrlProtocol.swift */; };
+		DC75BAE626102CA700333C8F /* NetworkRequestSniffableUrlProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC75BAE526102CA700333C8F /* NetworkRequestSniffableUrlProtocol.swift */; };
 		DC86F75726101DC100696363 /* Nog.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC86F75626101DC100696363 /* Nog.swift */; };
 		DC86F76226101E0300696363 /* XCTestManifests.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC86F76026101E0300696363 /* XCTestManifests.swift */; };
 		DC86F76326101E0300696363 /* NogTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC86F76126101E0300696363 /* NogTests.swift */; };
@@ -35,9 +33,7 @@
 /* Begin PBXFileReference section */
 		DC75BAB226101F5100333C8F /* AnyHttpRequestEvaluator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = AnyHttpRequestEvaluator.swift; path = Sources/Nog/RequestEvaluator/AnyHttpRequestEvaluator.swift; sourceTree = SOURCE_ROOT; };
 		DC75BAB326101F5100333C8F /* DomainHttpRequestEvaluator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = DomainHttpRequestEvaluator.swift; path = Sources/Nog/RequestEvaluator/DomainHttpRequestEvaluator.swift; sourceTree = SOURCE_ROOT; };
-		DC75BAB826101F5D00333C8F /* AlternateUrlRequestRedirector.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = AlternateUrlRequestRedirector.swift; path = Sources/Nog/RequestRedirector/AlternateUrlRequestRedirector.swift; sourceTree = "<group>"; };
-		DC75BACA26101F7F00333C8F /* NetworkRedirectUrlProtocol.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = NetworkRedirectUrlProtocol.swift; path = Sources/Nog/URLProtocol/NetworkRedirectUrlProtocol.swift; sourceTree = SOURCE_ROOT; };
-		DC75BACB26101F7F00333C8F /* NetworkRequestSniffableUrlProtocol.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = NetworkRequestSniffableUrlProtocol.swift; path = Sources/Nog/URLProtocol/NetworkRequestSniffableUrlProtocol.swift; sourceTree = SOURCE_ROOT; };
+		DC75BAE526102CA700333C8F /* NetworkRequestSniffableUrlProtocol.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = NetworkRequestSniffableUrlProtocol.swift; path = Sources/Nog/NetworkRequestSniffableUrlProtocol.swift; sourceTree = "<group>"; };
 		DC86F69826100F3200696363 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = Tests/Info.plist; sourceTree = "<group>"; };
 		DC86F75626101DC100696363 /* Nog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = Nog.swift; path = Sources/Nog/Nog.swift; sourceTree = "<group>"; };
 		DC86F76026101E0300696363 /* XCTestManifests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = XCTestManifests.swift; path = Tests/NogTests/XCTestManifests.swift; sourceTree = "<group>"; };
@@ -86,9 +82,8 @@
 				DC86F77426101EB400696363 /* NetworkInterceptorConfig.swift */,
 				DC86F76E26101EB400696363 /* NetworkRequestInterceptor.swift */,
 				DC86F77226101EB400696363 /* NetworkRequestRedirectHandler.swift */,
+				DC75BAE526102CA700333C8F /* NetworkRequestSniffableUrlProtocol.swift */,
 				DC86F78726101EF200696363 /* RequestEvaluator */,
-				DC86F78826101EFC00696363 /* RequestRedirector */,
-				DC86F78A26101F1100696363 /* URLProtocol */,
 				DC86F75626101DC100696363 /* Nog.swift */,
 			);
 			name = Sources;
@@ -101,23 +96,6 @@
 				DC75BAB326101F5100333C8F /* DomainHttpRequestEvaluator.swift */,
 			);
 			path = RequestEvaluator;
-			sourceTree = "<group>";
-		};
-		DC86F78826101EFC00696363 /* RequestRedirector */ = {
-			isa = PBXGroup;
-			children = (
-				DC75BAB826101F5D00333C8F /* AlternateUrlRequestRedirector.swift */,
-			);
-			name = RequestRedirector;
-			sourceTree = "<group>";
-		};
-		DC86F78A26101F1100696363 /* URLProtocol */ = {
-			isa = PBXGroup;
-			children = (
-				DC75BACA26101F7F00333C8F /* NetworkRedirectUrlProtocol.swift */,
-				DC75BACB26101F7F00333C8F /* NetworkRequestSniffableUrlProtocol.swift */,
-			);
-			path = URLProtocol;
 			sourceTree = "<group>";
 		};
 		DC8904D926100269008D2B5F = {
@@ -250,13 +228,11 @@
 				DC75BAB426101F5100333C8F /* AnyHttpRequestEvaluator.swift in Sources */,
 				DC86F77E26101EB400696363 /* NetworkInterceptorConfig.swift in Sources */,
 				DC86F77A26101EB400696363 /* NetworkInterceptor.swift in Sources */,
-				DC75BAB926101F5D00333C8F /* AlternateUrlRequestRedirector.swift in Sources */,
 				DC86F77826101EB400696363 /* NetworkRequestInterceptor.swift in Sources */,
 				DC86F77C26101EB400696363 /* NetworkRequestRedirectHandler.swift in Sources */,
-				DC75BACC26101F7F00333C8F /* NetworkRedirectUrlProtocol.swift in Sources */,
+				DC75BAE626102CA700333C8F /* NetworkRequestSniffableUrlProtocol.swift in Sources */,
 				DC75BAB526101F5100333C8F /* DomainHttpRequestEvaluator.swift in Sources */,
 				DC86F75726101DC100696363 /* Nog.swift in Sources */,
-				DC75BACD26101F7F00333C8F /* NetworkRequestSniffableUrlProtocol.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

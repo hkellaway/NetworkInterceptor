@@ -11,9 +11,6 @@ import Foundation
 class NetworkRequestSniffableUrlProtocol: URLProtocol {
     
     open override class func canInit(with request: URLRequest) -> Bool {
-        if NetworkInterceptor.shared.isRequestRedirectable(urlRequest: request) {
-            return false
-        }
         if let httpHeaders = request.allHTTPHeaderFields, httpHeaders.isEmpty {
             return false
         }
