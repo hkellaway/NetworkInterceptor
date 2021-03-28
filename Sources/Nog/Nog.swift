@@ -41,13 +41,11 @@ internal extension Notification.Name {
 
 public class NetworkLogger {
     
-    public let sessionConfiguration: URLSessionConfiguration
     public private(set) var isLogging = false
     
     private var requestCount = 0
     
-    public init(sessionConfiguration: URLSessionConfiguration = .default) {
-        self.sessionConfiguration = sessionConfiguration
+    public init() {
         NotificationCenter._networkLogger.addObserver(self, selector: #selector(logRequest(_:)), name: ._logRequest, object: nil)
     }
     
@@ -55,30 +53,33 @@ public class NetworkLogger {
         NotificationCenter._networkLogger.removeObserver(self)
     }
     
-    public func start() {
+    public func start(sessionConfiguration: URLSessionConfiguration = .default) {
         URLProtocol.registerClass(NetworkLoggerUrlProtocol.self)
-        swizzleProtocolClasses()
+        swizzleProtocolClasses(sessionConfiguration: sessionConfiguration)
+        sessionConfiguration.protocolClasses = [NetworkLoggerUrlProtocol.self] + (sessionConfiguration.protocolClasses ?? [])
         isLogging = true
     }
     
-    public func stop() {
+    public func stop(sessionConfiguration: URLSessionConfiguration = .default) {
         URLProtocol.unregisterClass(NetworkLoggerUrlProtocol.self)
-        swizzleProtocolClasses()
+        swizzleProtocolClasses(sessionConfiguration: sessionConfiguration)
+        sessionConfiguration.protocolClasses = (sessionConfiguration.protocolClasses ?? []).filter {
+            $0 != NetworkLoggerUrlProtocol.self
+        }
         isLogging = false
     }
     
-    public func toggle() {
+    public func toggle(sessionConfiguration: URLSessionConfiguration = .default) {
         if isLogging {
-            stop()
+            stop(sessionConfiguration: sessionConfiguration)
         } else {
-            start()
+            start(sessionConfiguration: sessionConfiguration)
         }
     }
     
-    private func swizzleProtocolClasses() {
-        let urlSessionConfigurationClass: AnyClass = object_getClass(sessionConfiguration)!
-
-        let method1: Method = class_getInstanceMethod(urlSessionConfigurationClass, #selector(getter: urlSessionConfigurationClass.protocolClasses))!
+    private func swizzleProtocolClasses(sessionConfiguration: URLSessionConfiguration = .default) {
+        let sessionConfigurationClass: AnyClass = object_getClass(sessionConfiguration)!
+        let method1: Method = class_getInstanceMethod(sessionConfigurationClass, #selector(getter: sessionConfigurationClass.protocolClasses))!
         let method2: Method = class_getInstanceMethod(URLSessionConfiguration.self, #selector(URLSessionConfiguration._injectedProtocolClasses))!
 
         method_exchangeImplementations(method1, method2)

@@ -30,8 +30,8 @@ import SwiftUI
 
 struct ContentView: View {
     
-    let networkLogger: NetworkLogger
-    let session: URLSession
+    let networkLogger: NetworkLogger = NetworkLogger()
+    let session: URLSession = .init(configuration: .default)
     @State var isLogging = false
     
     var body: some View {
@@ -59,6 +59,6 @@ struct ContentView: View {
 
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
-        ContentView(networkLogger: NetworkLogger(), session: URLSession(configuration: .default), isLogging: false)
+        ContentView()
     }
 }
