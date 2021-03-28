@@ -55,6 +55,11 @@ public class NetworkLogger {
     
     /// Starts recording of network requests.
     public func start() {
+        guard !isLogging else {
+            print("[Nog] Attempt to `start` while already started. Returning.")
+            return
+        }
+        
         URLProtocol.registerClass(NetworkLoggerUrlProtocol.self)
         swizzleProtocolClasses()
         isLogging = true
@@ -62,6 +67,11 @@ public class NetworkLogger {
     
     /// Stops recording of networking requests.
     public func stop() {
+        guard isLogging else {
+            print("[Nog] Attempt to `stop` while already stopped. Returning.")
+            return
+        }
+        
         URLProtocol.unregisterClass(NetworkLoggerUrlProtocol.self)
         swizzleProtocolClasses()
         isLogging = false
