@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		DC6D35B52611061100560A6D /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = DC6D35B42611061100560A6D /* Alamofire */; };
 		DC86F6C9261011A700696363 /* NogDemoApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC86F6C8261011A700696363 /* NogDemoApp.swift */; };
 		DC86F6CB261011A700696363 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC86F6CA261011A700696363 /* ContentView.swift */; };
 		DC86F6CD261011A800696363 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = DC86F6CC261011A800696363 /* Assets.xcassets */; };
@@ -31,7 +30,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				DC86F6DE2610133C00696363 /* Nog in Frameworks */,
-				DC6D35B52611061100560A6D /* Alamofire in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -101,7 +99,6 @@
 			name = NogDemo;
 			packageProductDependencies = (
 				DC86F6DD2610133C00696363 /* Nog */,
-				DC6D35B42611061100560A6D /* Alamofire */,
 			);
 			productName = NogDemo;
 			productReference = DC86F6C5261011A700696363 /* NogDemo.app */;
@@ -131,7 +128,6 @@
 			);
 			mainGroup = DC86F6BC261011A700696363;
 			packageReferences = (
-				DC6D35B32611061100560A6D /* XCRemoteSwiftPackageReference "Alamofire" */,
 			);
 			productRefGroup = DC86F6C6261011A700696363 /* Products */;
 			projectDirPath = "";
@@ -350,23 +346,7 @@
 		};
 /* End XCConfigurationList section */
 
-/* Begin XCRemoteSwiftPackageReference section */
-		DC6D35B32611061100560A6D /* XCRemoteSwiftPackageReference "Alamofire" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/Alamofire/Alamofire";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = "5.0.0-rc.2";
-			};
-		};
-/* End XCRemoteSwiftPackageReference section */
-
 /* Begin XCSwiftPackageProductDependency section */
-		DC6D35B42611061100560A6D /* Alamofire */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = DC6D35B32611061100560A6D /* XCRemoteSwiftPackageReference "Alamofire" */;
-			productName = Alamofire;
-		};
 		DC86F6DD2610133C00696363 /* Nog */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = Nog;
