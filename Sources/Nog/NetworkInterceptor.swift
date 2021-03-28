@@ -11,15 +11,16 @@ import Foundation
 @objc public class NetworkInterceptor: NSObject {
     
     @objc public static let shared = NetworkInterceptor()
-    let networkRequestInterceptor = NetworkRequestInterceptor()
     var requestCount = 0
     
     @objc public func startRecording(){
-        self.networkRequestInterceptor.startRecording()
+        URLProtocol.registerClass(NetworkRequestSniffableUrlProtocol.self)
+        swizzleProtocolClasses()
     }
     
     @objc public func stopRecording(){
-        self.networkRequestInterceptor.stopRecording()
+        URLProtocol.unregisterClass(NetworkRequestSniffableUrlProtocol.self)
+        swizzleProtocolClasses()
     }
     
     func sniffRequest(urlRequest: URLRequest){
@@ -30,6 +31,31 @@ import Foundation
         requestCount = requestCount + 1
         let loggableText = "Request #\(requestCount): CURL => \(urlRequest.description)"
         print(loggableText)
+    }
+    
+    func swizzleProtocolClasses(){
+        let instance = URLSessionConfiguration.default
+        let uRLSessionConfigurationClass: AnyClass = object_getClass(instance)!
+
+        let method1: Method = class_getInstanceMethod(uRLSessionConfigurationClass, #selector(getter: uRLSessionConfigurationClass.protocolClasses))!
+        let method2: Method = class_getInstanceMethod(URLSessionConfiguration.self, #selector(URLSessionConfiguration.fakeProcotolClasses))!
+
+        method_exchangeImplementations(method1, method2)
+    }
+    
+}
+
+extension URLSessionConfiguration {
+    
+    @objc func fakeProcotolClasses() -> [AnyClass]? {
+        guard let fakeProcotolClasses = self.fakeProcotolClasses() else {
+            return []
+        }
+        var originalProtocolClasses = fakeProcotolClasses.filter {
+            return $0 != NetworkRequestSniffableUrlProtocol.self
+        }
+        originalProtocolClasses.insert(NetworkRequestSniffableUrlProtocol.self, at: 0)
+        return originalProtocolClasses
     }
     
 }
