@@ -25,14 +25,19 @@
 //
 //
 
+import Alamofire
 import Nog
 import SwiftUI
 
 struct ContentView: View {
     
     let networkLogger: NetworkLogger = NetworkLogger()
-    let session: URLSession = .init(configuration: .default)
+    let session: Alamofire.Session
     @State var isLogging = false
+    
+    init() {
+        self.session = Session(configuration: URLSessionConfiguration.af.default)
+    }
     
     var body: some View {
         VStack {
@@ -47,7 +52,7 @@ struct ContentView: View {
         guard let url = URL(string: "https://github.com") else {
             return
         }
-        self.session.dataTask(with: URLRequest(url: url)).resume()
+        let _ = session.request(URLRequest(url: url)).resume()
     }
     
     func toggleLogging() {
