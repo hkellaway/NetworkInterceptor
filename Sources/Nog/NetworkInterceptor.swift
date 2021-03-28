@@ -16,19 +16,6 @@ public protocol SniffableRequestHandler {
     func sniffRequest(urlRequest: URLRequest)
 }
 
-public protocol RedirectableRequestHandler {
-    func redirectedRequest(originalUrlRequest: URLRequest) -> URLRequest
-}
-
-public struct RequestRedirector {
-    public let requestEvaluator: RequestEvaluator
-    public let redirectableRequestHandler: RedirectableRequestHandler
-    public init(requestEvaluator: RequestEvaluator, redirectableRequestHandler: RedirectableRequestHandler) {
-        self.requestEvaluator = requestEvaluator
-        self.redirectableRequestHandler = redirectableRequestHandler
-    }
-}
-
 @objc public class NetworkInterceptor: NSObject {
     
     @objc public static let shared = NetworkInterceptor()
