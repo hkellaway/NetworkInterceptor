@@ -8,8 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		DC8904ED26100269008D2B5F /* Nog.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DC8904E326100269008D2B5F /* Nog.framework */; };
-		DC8904F226100269008D2B5F /* NogTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC8904F126100269008D2B5F /* NogTests.swift */; };
-		DC8904F426100269008D2B5F /* Nog.h in Headers */ = {isa = PBXBuildFile; fileRef = DC8904E626100269008D2B5F /* Nog.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		DC890538261005B2008D2B5F /* Tests in Resources */ = {isa = PBXBuildFile; fileRef = DC890537261005B2008D2B5F /* Tests */; };
+		DC89053E261005C8008D2B5F /* Sources in Resources */ = {isa = PBXBuildFile; fileRef = DC89053D261005C8008D2B5F /* Sources */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -24,11 +24,9 @@
 
 /* Begin PBXFileReference section */
 		DC8904E326100269008D2B5F /* Nog.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Nog.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		DC8904E626100269008D2B5F /* Nog.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Nog.h; sourceTree = "<group>"; };
-		DC8904E726100269008D2B5F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		DC8904EC26100269008D2B5F /* NogTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = NogTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		DC8904F126100269008D2B5F /* NogTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NogTests.swift; sourceTree = "<group>"; };
-		DC8904F326100269008D2B5F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		DC890537261005B2008D2B5F /* Tests */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Tests; sourceTree = "<group>"; };
+		DC89053D261005C8008D2B5F /* Sources */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Sources; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -53,8 +51,8 @@
 		DC8904D926100269008D2B5F = {
 			isa = PBXGroup;
 			children = (
-				DC8904E526100269008D2B5F /* Nog */,
-				DC8904F026100269008D2B5F /* NogTests */,
+				DC89053D261005C8008D2B5F /* Sources */,
+				DC890537261005B2008D2B5F /* Tests */,
 				DC8904E426100269008D2B5F /* Products */,
 			);
 			sourceTree = "<group>";
@@ -68,24 +66,6 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
-		DC8904E526100269008D2B5F /* Nog */ = {
-			isa = PBXGroup;
-			children = (
-				DC8904E626100269008D2B5F /* Nog.h */,
-				DC8904E726100269008D2B5F /* Info.plist */,
-			);
-			path = Nog;
-			sourceTree = "<group>";
-		};
-		DC8904F026100269008D2B5F /* NogTests */ = {
-			isa = PBXGroup;
-			children = (
-				DC8904F126100269008D2B5F /* NogTests.swift */,
-				DC8904F326100269008D2B5F /* Info.plist */,
-			);
-			path = NogTests;
-			sourceTree = "<group>";
-		};
 /* End PBXGroup section */
 
 /* Begin PBXHeadersBuildPhase section */
@@ -93,7 +73,6 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				DC8904F426100269008D2B5F /* Nog.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -177,6 +156,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				DC89053E261005C8008D2B5F /* Sources in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -184,6 +164,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				DC890538261005B2008D2B5F /* Tests in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -201,7 +182,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				DC8904F226100269008D2B5F /* NogTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -347,7 +327,7 @@
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				INFOPLIST_FILE = Nog/Info.plist;
+				INFOPLIST_FILE = Sources/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -373,7 +353,7 @@
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				INFOPLIST_FILE = Nog/Info.plist;
+				INFOPLIST_FILE = Sources/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -395,7 +375,7 @@
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = G58XPAD97M;
-				INFOPLIST_FILE = NogTests/Info.plist;
+				INFOPLIST_FILE = Tests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -413,7 +393,7 @@
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = G58XPAD97M;
-				INFOPLIST_FILE = NogTests/Info.plist;
+				INFOPLIST_FILE = Tests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
