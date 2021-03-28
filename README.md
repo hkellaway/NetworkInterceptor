@@ -2,7 +2,7 @@
 
 [![Swift](https://img.shields.io/badge/Swift-5.3-orange.svg)](https://swift.org/about/)
 [![SPM](https://img.shields.io/badge/SPM-compatible-brightgreen.svg)](https://swift.org/package-manager/)
-[![License](https://img.shields.io/badge/License-MIT-lightgray.svg)](https://raw.githubusercontent.com/hkellaway/Nog/master/LICENSE)
+[![License](https://img.shields.io/badge/License-MIT-lightgray.svg)](https://raw.githubusercontent.com/hkellaway/Nog/main/LICENSE)
 
 ## Usage
 
@@ -39,7 +39,7 @@ See the [Demo](/Demo) project for sample usage.
 
 ### Installation with Swift Package Manager
 
-See [Adding Package Dependencies to Your App](https://developer.apple.com/documentation/xcode/adding_package_dependencies_to_your_app). Search for `Nog` with *Owner* `hkellaway`. Point to the desired version or the `master` branch for the latest.
+See [Adding Package Dependencies to Your App](https://developer.apple.com/documentation/xcode/adding_package_dependencies_to_your_app). Search for `Nog` with *Owner* `hkellaway`. Point to the desired version or the `main` branch for the latest.
 
 ## Credits
 
@@ -47,4 +47,4 @@ Nog was created by [Harlan Kellaway](http://hkellaway.github.io) forked original
 
 ## License
 
-Nog is available under the MIT license. See the [LICENSE](https://raw.githubusercontent.com/hkellaway/Nog/master/LICENSE) file for more info.
+Nog is available under the MIT license. See the [LICENSE](https://raw.githubusercontent.com/hkellaway/Nog/main/LICENSE) file for more info.
