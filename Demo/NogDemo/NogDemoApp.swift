@@ -34,18 +34,8 @@ struct NogDemoApp: App {
     var body: some Scene {
         WindowGroup {
             ContentView()
-                .onAppear(perform: startNetworkLogger)
+                .onAppear(perform: NetworkInterceptor.shared.startRecording)
         }
-    }
-    
-    func startNetworkLogger() {
-        let requestSniffers: [RequestSniffer] = [
-            RequestSniffer(requestEvaluator: AnyHttpRequestEvaluator())
-        ]
-
-        let networkConfig = NetworkInterceptorConfig(requestSniffers: requestSniffers)
-        NetworkInterceptor.shared.setup(config: networkConfig)
-        NetworkInterceptor.shared.startRecording()
     }
     
 }

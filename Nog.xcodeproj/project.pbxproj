@@ -15,7 +15,6 @@
 		DC86F77826101EB400696363 /* NetworkRequestInterceptor.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC86F76E26101EB400696363 /* NetworkRequestInterceptor.swift */; };
 		DC86F77A26101EB400696363 /* NetworkInterceptor.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC86F77026101EB400696363 /* NetworkInterceptor.swift */; };
 		DC86F77C26101EB400696363 /* NetworkRequestRedirectHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC86F77226101EB400696363 /* NetworkRequestRedirectHandler.swift */; };
-		DC86F77E26101EB400696363 /* NetworkInterceptorConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC86F77426101EB400696363 /* NetworkInterceptorConfig.swift */; };
 		DC8904ED26100269008D2B5F /* Nog.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DC8904E326100269008D2B5F /* Nog.framework */; };
 /* End PBXBuildFile section */
 
@@ -39,7 +38,6 @@
 		DC86F76E26101EB400696363 /* NetworkRequestInterceptor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = NetworkRequestInterceptor.swift; path = Sources/Nog/NetworkRequestInterceptor.swift; sourceTree = "<group>"; };
 		DC86F77026101EB400696363 /* NetworkInterceptor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = NetworkInterceptor.swift; path = Sources/Nog/NetworkInterceptor.swift; sourceTree = "<group>"; };
 		DC86F77226101EB400696363 /* NetworkRequestRedirectHandler.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = NetworkRequestRedirectHandler.swift; path = Sources/Nog/NetworkRequestRedirectHandler.swift; sourceTree = "<group>"; };
-		DC86F77426101EB400696363 /* NetworkInterceptorConfig.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = NetworkInterceptorConfig.swift; path = Sources/Nog/NetworkInterceptorConfig.swift; sourceTree = "<group>"; };
 		DC8904E326100269008D2B5F /* Nog.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Nog.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		DC8904EC26100269008D2B5F /* NogTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = NogTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -78,7 +76,6 @@
 			children = (
 				DC75BAED26102CFD00333C8F /* AnyHttpRequestEvaluator.swift */,
 				DC86F77026101EB400696363 /* NetworkInterceptor.swift */,
-				DC86F77426101EB400696363 /* NetworkInterceptorConfig.swift */,
 				DC86F76E26101EB400696363 /* NetworkRequestInterceptor.swift */,
 				DC86F77226101EB400696363 /* NetworkRequestRedirectHandler.swift */,
 				DC75BAE526102CA700333C8F /* NetworkRequestSniffableUrlProtocol.swift */,
@@ -215,7 +212,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				DC75BAEE26102CFD00333C8F /* AnyHttpRequestEvaluator.swift in Sources */,
-				DC86F77E26101EB400696363 /* NetworkInterceptorConfig.swift in Sources */,
 				DC86F77A26101EB400696363 /* NetworkInterceptor.swift in Sources */,
 				DC86F77826101EB400696363 /* NetworkRequestInterceptor.swift in Sources */,
 				DC86F77C26101EB400696363 /* NetworkRequestRedirectHandler.swift in Sources */,

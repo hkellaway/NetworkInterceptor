@@ -24,13 +24,6 @@ public protocol RedirectableRequestHandler {
     func redirectedRequest(originalUrlRequest: URLRequest) -> URLRequest
 }
 
-public struct RequestSniffer {
-    public let requestEvaluator: RequestEvaluator
-    public init(requestEvaluator: RequestEvaluator) {
-        self.requestEvaluator = requestEvaluator
-    }
-}
-
 public struct RequestRedirector {
     public let requestEvaluator: RequestEvaluator
     public let redirectableRequestHandler: RedirectableRequestHandler
@@ -44,12 +37,8 @@ public struct RequestRedirector {
     
     @objc public static let shared = NetworkInterceptor()
     let networkRequestInterceptor = NetworkRequestInterceptor()
-    var config: NetworkInterceptorConfig?
+    let sniffer = AnyHttpRequestEvaluator()
     var requestCount = 0
-    
-    public func setup(config: NetworkInterceptorConfig){
-        self.config = config
-    }
     
     @objc public func startRecording(){
         self.networkRequestInterceptor.startRecording()
@@ -60,15 +49,10 @@ public struct RequestRedirector {
     }
     
     func sniffRequest(urlRequest: URLRequest){
-        guard let config = self.config else {
-            return
-        }
-        for sniffer in config.requestSniffers {
-            if sniffer.requestEvaluator.isActionAllowed(urlRequest: urlRequest) {
-                requestCount = requestCount + 1
-                let loggableText = "Request #\(requestCount): CURL => \(urlRequest.description)"
-                print(loggableText)
-            }
+        if sniffer.isActionAllowed(urlRequest: urlRequest) {
+            requestCount = requestCount + 1
+            let loggableText = "Request #\(requestCount): CURL => \(urlRequest.description)"
+            print(loggableText)
         }
     }
     
