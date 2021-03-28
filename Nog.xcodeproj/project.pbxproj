@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		DC86F6A426100F4300696363 /* NogTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC86F6A226100F4300696363 /* NogTests.swift */; };
+		DC86F6A526100F4300696363 /* XCTestManifests.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC86F6A326100F4300696363 /* XCTestManifests.swift */; };
+		DC86F6B426100F7D00696363 /* Nog.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC86F6B326100F7D00696363 /* Nog.swift */; };
 		DC8904ED26100269008D2B5F /* Nog.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DC8904E326100269008D2B5F /* Nog.framework */; };
 /* End PBXBuildFile section */
 
@@ -21,10 +24,13 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		DC86F69826100F3200696363 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = Tests/Info.plist; sourceTree = "<group>"; };
+		DC86F6A226100F4300696363 /* NogTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = NogTests.swift; path = Tests/NogTests/NogTests.swift; sourceTree = SOURCE_ROOT; };
+		DC86F6A326100F4300696363 /* XCTestManifests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = XCTestManifests.swift; path = Tests/NogTests/XCTestManifests.swift; sourceTree = SOURCE_ROOT; };
+		DC86F6AB26100F6F00696363 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = Sources/Info.plist; sourceTree = "<group>"; };
+		DC86F6B326100F7D00696363 /* Nog.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Nog.swift; path = Sources/Nog/Nog.swift; sourceTree = SOURCE_ROOT; };
 		DC8904E326100269008D2B5F /* Nog.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Nog.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		DC8904EC26100269008D2B5F /* NogTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = NogTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		DC890537261005B2008D2B5F /* Tests */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Tests; sourceTree = "<group>"; };
-		DC89053D261005C8008D2B5F /* Sources */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Sources; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -46,11 +52,46 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		DC86F69526100F0100696363 /* Sources */ = {
+			isa = PBXGroup;
+			children = (
+				DC86F6AB26100F6F00696363 /* Info.plist */,
+				DC86F6AA26100F6200696363 /* Nog */,
+			);
+			name = Sources;
+			sourceTree = "<group>";
+		};
+		DC86F69626100F0C00696363 /* Tests */ = {
+			isa = PBXGroup;
+			children = (
+				DC86F69826100F3200696363 /* Info.plist */,
+				DC86F69726100F2000696363 /* NogTests */,
+			);
+			name = Tests;
+			sourceTree = "<group>";
+		};
+		DC86F69726100F2000696363 /* NogTests */ = {
+			isa = PBXGroup;
+			children = (
+				DC86F6A226100F4300696363 /* NogTests.swift */,
+				DC86F6A326100F4300696363 /* XCTestManifests.swift */,
+			);
+			path = NogTests;
+			sourceTree = "<group>";
+		};
+		DC86F6AA26100F6200696363 /* Nog */ = {
+			isa = PBXGroup;
+			children = (
+				DC86F6B326100F7D00696363 /* Nog.swift */,
+			);
+			path = Nog;
+			sourceTree = "<group>";
+		};
 		DC8904D926100269008D2B5F = {
 			isa = PBXGroup;
 			children = (
-				DC89053D261005C8008D2B5F /* Sources */,
-				DC890537261005B2008D2B5F /* Tests */,
+				DC86F69526100F0100696363 /* Sources */,
+				DC86F69626100F0C00696363 /* Tests */,
 				DC8904E426100269008D2B5F /* Products */,
 			);
 			sourceTree = "<group>";
@@ -128,6 +169,7 @@
 					};
 					DC8904EB26100269008D2B5F = {
 						CreatedOnToolsVersion = 12.4;
+						LastSwiftMigration = 1240;
 					};
 				};
 			};
@@ -172,6 +214,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				DC86F6B426100F7D00696363 /* Nog.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -179,6 +222,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				DC86F6A426100F4300696363 /* NogTests.swift in Sources */,
+				DC86F6A526100F4300696363 /* XCTestManifests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -373,6 +418,8 @@
 		DC8904FB26100269008D2B5F /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = G58XPAD97M;
 				INFOPLIST_FILE = Tests/Info.plist;
@@ -383,6 +430,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.harlankellaway.NogTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -391,6 +439,8 @@
 		DC8904FC26100269008D2B5F /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = G58XPAD97M;
 				INFOPLIST_FILE = Tests/Info.plist;

@@ -34,4 +34,5 @@ public struct Nog {
     public func speak() -> String {
         return "Hello World"
     }
+    
 }
