@@ -8,8 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		DC8904ED26100269008D2B5F /* Nog.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DC8904E326100269008D2B5F /* Nog.framework */; };
-		DC890538261005B2008D2B5F /* Tests in Resources */ = {isa = PBXBuildFile; fileRef = DC890537261005B2008D2B5F /* Tests */; };
-		DC89053E261005C8008D2B5F /* Sources in Resources */ = {isa = PBXBuildFile; fileRef = DC89053D261005C8008D2B5F /* Sources */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -126,6 +124,7 @@
 				TargetAttributes = {
 					DC8904E226100269008D2B5F = {
 						CreatedOnToolsVersion = 12.4;
+						LastSwiftMigration = 1240;
 					};
 					DC8904EB26100269008D2B5F = {
 						CreatedOnToolsVersion = 12.4;
@@ -156,7 +155,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				DC89053E261005C8008D2B5F /* Sources in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -164,7 +162,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				DC890538261005B2008D2B5F /* Tests in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -321,6 +318,7 @@
 		DC8904F826100269008D2B5F /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = G58XPAD97M;
@@ -339,6 +337,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;
 				SUPPORTS_MACCATALYST = NO;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -347,6 +346,7 @@
 		DC8904F926100269008D2B5F /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = G58XPAD97M;

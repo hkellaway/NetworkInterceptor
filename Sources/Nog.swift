@@ -26,3 +26,12 @@
 //
 
 import Foundation
+
+public struct Nog {
+    
+    public init() { }
+    
+    public func speak() -> String {
+        return "Hello World"
+    }
+}
