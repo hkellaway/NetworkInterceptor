@@ -40,7 +40,7 @@ struct NogDemoApp: App {
     
     func startNetworkLogger() {
         let requestSniffers: [RequestSniffer] = [
-            RequestSniffer(requestEvaluator: AnyHttpRequestEvaluator(), loggingMode: .print)
+            RequestSniffer(requestEvaluator: AnyHttpRequestEvaluator())
         ]
 
         let networkConfig = NetworkInterceptorConfig(requestSniffers: requestSniffers)
