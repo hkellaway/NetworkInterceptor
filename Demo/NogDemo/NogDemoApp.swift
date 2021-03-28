@@ -31,10 +31,12 @@ import SwiftUI
 @main
 struct NogDemoApp: App {
     
+    let networkLogger = NetworkLogger(sessionConfiguration: .default)
+    
     var body: some Scene {
         WindowGroup {
-            ContentView()
-                .onAppear(perform: NetworkInterceptor.shared.startRecording)
+            ContentView(networkLogger: networkLogger,
+                        session: .init(configuration: .default))
         }
     }
     

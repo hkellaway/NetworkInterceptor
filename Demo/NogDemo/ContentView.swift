@@ -30,23 +30,35 @@ import SwiftUI
 
 struct ContentView: View {
     
-    let session = URLSession(configuration: .default)
+    let networkLogger: NetworkLogger
+    let session: URLSession
+    @State var isLogging = false
     
     var body: some View {
-        Button(Nog().speak(), action: makeRequest)
+        VStack {
+            Button("Make Request", action: makeRequest)
+            Button("\(isLogging ? "Stop" : "Start") Logging", action: toggleLogging)
+                .foregroundColor(isLogging ? .red : .green)
+        }
+        .onAppear(perform: toggleLogging)
     }
     
     func makeRequest() {
-        if let url = URL(string: "https://github.com") {
-            let request = URLRequest(url: url)
-            self.session.dataTask(with: request).resume()
+        guard let url = URL(string: "https://github.com") else {
+            return
         }
+        self.session.dataTask(with: URLRequest(url: url)).resume()
+    }
+    
+    func toggleLogging() {
+        networkLogger.toggle()
+        self.isLogging = networkLogger.isLogging
     }
     
 }
 
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
-        ContentView()
+        ContentView(networkLogger: NetworkLogger(), session: URLSession(configuration: .default), isLogging: false)
     }
 }
