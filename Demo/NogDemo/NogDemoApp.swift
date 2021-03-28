@@ -25,13 +25,29 @@
 //
 //
 
+import Nog
 import SwiftUI
 
 @main
 struct NogDemoApp: App {
+    
     var body: some Scene {
         WindowGroup {
             ContentView()
+                .onAppear(perform: startNetworkLogger)
         }
     }
+    
+    func startNetworkLogger() {
+        let requestSniffers: [RequestSniffer] = [
+            RequestSniffer(requestEvaluator: AnyHttpRequestEvaluator(), handlers: [
+                SniffableRequestHandlerRegistrable.console(logginMode: .print).requestHandler()
+            ])
+        ]
+
+        let networkConfig = NetworkInterceptorConfig(requestSniffers: requestSniffers)
+        NetworkInterceptor.shared.setup(config: networkConfig)
+        NetworkInterceptor.shared.startRecording()
+    }
+    
 }

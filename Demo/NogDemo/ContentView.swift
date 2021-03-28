@@ -29,10 +29,20 @@ import Nog
 import SwiftUI
 
 struct ContentView: View {
+    
+    let session = URLSession(configuration: .default)
+    
     var body: some View {
-        Text(Nog().speak())
-            .padding()
+        Button(Nog().speak(), action: makeRequest)
     }
+    
+    func makeRequest() {
+        if let url = URL(string: "https://github.com") {
+            let request = URLRequest(url: url)
+            self.session.dataTask(with: request).resume()
+        }
+    }
+    
 }
 
 struct ContentView_Previews: PreviewProvider {
