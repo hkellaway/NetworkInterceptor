@@ -11,7 +11,6 @@
 		DC75BAB526101F5100333C8F /* DomainHttpRequestEvaluator.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC75BAB326101F5100333C8F /* DomainHttpRequestEvaluator.swift */; };
 		DC75BAB926101F5D00333C8F /* AlternateUrlRequestRedirector.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC75BAB826101F5D00333C8F /* AlternateUrlRequestRedirector.swift */; };
 		DC75BAC626101F7700333C8F /* ConsoleLoggerSniffableRequestHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC75BAC426101F7700333C8F /* ConsoleLoggerSniffableRequestHandler.swift */; };
-		DC75BAC726101F7700333C8F /* SlackSniffableRequestHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC75BAC526101F7700333C8F /* SlackSniffableRequestHandler.swift */; };
 		DC75BACC26101F7F00333C8F /* NetworkRedirectUrlProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC75BACA26101F7F00333C8F /* NetworkRedirectUrlProtocol.swift */; };
 		DC75BACD26101F7F00333C8F /* NetworkRequestSniffableUrlProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC75BACB26101F7F00333C8F /* NetworkRequestSniffableUrlProtocol.swift */; };
 		DC86F75726101DC100696363 /* Nog.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC86F75626101DC100696363 /* Nog.swift */; };
@@ -40,7 +39,6 @@
 		DC75BAB326101F5100333C8F /* DomainHttpRequestEvaluator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = DomainHttpRequestEvaluator.swift; path = Sources/Nog/RequestEvaluator/DomainHttpRequestEvaluator.swift; sourceTree = SOURCE_ROOT; };
 		DC75BAB826101F5D00333C8F /* AlternateUrlRequestRedirector.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = AlternateUrlRequestRedirector.swift; path = Sources/Nog/RequestRedirector/AlternateUrlRequestRedirector.swift; sourceTree = "<group>"; };
 		DC75BAC426101F7700333C8F /* ConsoleLoggerSniffableRequestHandler.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ConsoleLoggerSniffableRequestHandler.swift; path = Sources/Nog/SniffableRequestHandler/ConsoleLoggerSniffableRequestHandler.swift; sourceTree = "<group>"; };
-		DC75BAC526101F7700333C8F /* SlackSniffableRequestHandler.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SlackSniffableRequestHandler.swift; path = Sources/Nog/SniffableRequestHandler/SlackSniffableRequestHandler.swift; sourceTree = "<group>"; };
 		DC75BACA26101F7F00333C8F /* NetworkRedirectUrlProtocol.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = NetworkRedirectUrlProtocol.swift; path = Sources/Nog/URLProtocol/NetworkRedirectUrlProtocol.swift; sourceTree = SOURCE_ROOT; };
 		DC75BACB26101F7F00333C8F /* NetworkRequestSniffableUrlProtocol.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = NetworkRequestSniffableUrlProtocol.swift; path = Sources/Nog/URLProtocol/NetworkRequestSniffableUrlProtocol.swift; sourceTree = SOURCE_ROOT; };
 		DC86F69826100F3200696363 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = Tests/Info.plist; sourceTree = "<group>"; };
@@ -123,7 +121,6 @@
 			isa = PBXGroup;
 			children = (
 				DC75BAC426101F7700333C8F /* ConsoleLoggerSniffableRequestHandler.swift */,
-				DC75BAC526101F7700333C8F /* SlackSniffableRequestHandler.swift */,
 			);
 			name = SniffableRequestHandler;
 			sourceTree = "<group>";
@@ -276,7 +273,6 @@
 				DC75BAB526101F5100333C8F /* DomainHttpRequestEvaluator.swift in Sources */,
 				DC86F75726101DC100696363 /* Nog.swift in Sources */,
 				DC75BACD26101F7F00333C8F /* NetworkRequestSniffableUrlProtocol.swift in Sources */,
-				DC75BAC726101F7700333C8F /* SlackSniffableRequestHandler.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
