@@ -8,10 +8,6 @@
 
 import Foundation
 
-protocol RequestRefirer {
-    func refireURLRequest(urlRequest: URLRequest)
-}
-
 public protocol RequestEvaluator: class {
     func isActionAllowed(urlRequest: URLRequest) -> Bool
 }
@@ -56,25 +52,4 @@ public struct RequestRedirector {
         }
     }
     
-}
-
-extension NetworkInterceptor: RequestRefirer {
-    func refireURLRequest(urlRequest: URLRequest) {
-        var request = urlRequest
-        request.addValue("true", forHTTPHeaderField: "Refired")
-        let task = URLSession.shared.dataTask(with: request as URLRequest) { (data: Data?, response: URLResponse?, error: Error?) in
-            guard let data = data else {
-                return
-            }
-            do {
-                _ = try JSONSerialization.jsonObject(with: data, options: .allowFragments) as? [String:Any]
-            } catch _ as NSError {
-            }
-            if error != nil{
-                return
-            }
-        }
-        task.resume()
-        
-    }
 }

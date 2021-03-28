@@ -14,9 +14,6 @@ class NetworkRequestSniffableUrlProtocol: URLProtocol {
         if let httpHeaders = request.allHTTPHeaderFields, httpHeaders.isEmpty {
             return false
         }
-        if let httpHeaders = request.allHTTPHeaderFields, let refiredValue = httpHeaders["Refired"], refiredValue == "true" {
-            return false
-        }
         if let _ = URLProtocol.property(forKey: "NetworkRequestSniffableUrlProtocol", in: request) {
             return false
         }
