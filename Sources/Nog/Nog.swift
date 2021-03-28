@@ -54,35 +54,32 @@ public class NetworkLogger {
     // MARK: Public instance functions
     
     /// Starts recording of network requests.
-    public func start(sessionConfiguration: URLSessionConfiguration = .default) {
+    public func start() {
         URLProtocol.registerClass(NetworkLoggerUrlProtocol.self)
-        swizzleProtocolClasses(sessionConfiguration: sessionConfiguration)
-        sessionConfiguration.protocolClasses = [NetworkLoggerUrlProtocol.self] + (sessionConfiguration.protocolClasses ?? [])
+        swizzleProtocolClasses()
         isLogging = true
     }
     
     /// Stops recording of networking requests.
-    public func stop(sessionConfiguration: URLSessionConfiguration = .default) {
+    public func stop() {
         URLProtocol.unregisterClass(NetworkLoggerUrlProtocol.self)
-        swizzleProtocolClasses(sessionConfiguration: sessionConfiguration)
-        sessionConfiguration.protocolClasses = (sessionConfiguration.protocolClasses ?? []).filter {
-            $0 != NetworkLoggerUrlProtocol.self
-        }
+        swizzleProtocolClasses()
         isLogging = false
     }
     
-    public func toggle(sessionConfiguration: URLSessionConfiguration = .default) {
+    public func toggle() {
         if isLogging {
-            stop(sessionConfiguration: sessionConfiguration)
+            stop()
         } else {
-            start(sessionConfiguration: sessionConfiguration)
+            start()
         }
     }
     
     // MARK: Private instance functions
     
-    private func swizzleProtocolClasses(sessionConfiguration: URLSessionConfiguration = .default) {
-        let sessionConfigurationClass: AnyClass = object_getClass(sessionConfiguration)!
+    private func swizzleProtocolClasses() {
+        let instance = URLSessionConfiguration.default
+        let sessionConfigurationClass: AnyClass = object_getClass(instance)!
         let method1: Method = class_getInstanceMethod(sessionConfigurationClass, #selector(getter: sessionConfigurationClass.protocolClasses))!
         let method2: Method = class_getInstanceMethod(URLSessionConfiguration.self, #selector(URLSessionConfiguration._injectedProtocolClasses))!
 
