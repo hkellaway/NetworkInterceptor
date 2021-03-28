@@ -7,9 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		DC86F6A426100F4300696363 /* NogTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC86F6A226100F4300696363 /* NogTests.swift */; };
-		DC86F6A526100F4300696363 /* XCTestManifests.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC86F6A326100F4300696363 /* XCTestManifests.swift */; };
-		DC86F6B426100F7D00696363 /* Nog.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC86F6B326100F7D00696363 /* Nog.swift */; };
+		DC86F75726101DC100696363 /* Nog.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC86F75626101DC100696363 /* Nog.swift */; };
+		DC86F76226101E0300696363 /* XCTestManifests.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC86F76026101E0300696363 /* XCTestManifests.swift */; };
+		DC86F76326101E0300696363 /* NogTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC86F76126101E0300696363 /* NogTests.swift */; };
 		DC8904ED26100269008D2B5F /* Nog.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DC8904E326100269008D2B5F /* Nog.framework */; };
 /* End PBXBuildFile section */
 
@@ -25,10 +25,9 @@
 
 /* Begin PBXFileReference section */
 		DC86F69826100F3200696363 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = Tests/Info.plist; sourceTree = "<group>"; };
-		DC86F6A226100F4300696363 /* NogTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = NogTests.swift; path = Tests/NogTests/NogTests.swift; sourceTree = SOURCE_ROOT; };
-		DC86F6A326100F4300696363 /* XCTestManifests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = XCTestManifests.swift; path = Tests/NogTests/XCTestManifests.swift; sourceTree = SOURCE_ROOT; };
-		DC86F6AB26100F6F00696363 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = Sources/Info.plist; sourceTree = "<group>"; };
-		DC86F6B326100F7D00696363 /* Nog.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Nog.swift; path = Sources/Nog/Nog.swift; sourceTree = SOURCE_ROOT; };
+		DC86F75626101DC100696363 /* Nog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = Nog.swift; path = Sources/Nog/Nog.swift; sourceTree = "<group>"; };
+		DC86F76026101E0300696363 /* XCTestManifests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = XCTestManifests.swift; path = Tests/NogTests/XCTestManifests.swift; sourceTree = "<group>"; };
+		DC86F76126101E0300696363 /* NogTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = NogTests.swift; path = Tests/NogTests/NogTests.swift; sourceTree = "<group>"; };
 		DC8904E326100269008D2B5F /* Nog.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Nog.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		DC8904EC26100269008D2B5F /* NogTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = NogTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -52,45 +51,28 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		DC86F69526100F0100696363 /* Sources */ = {
-			isa = PBXGroup;
-			children = (
-				DC86F6AB26100F6F00696363 /* Info.plist */,
-				DC86F6AA26100F6200696363 /* Nog */,
-			);
-			name = Sources;
-			sourceTree = "<group>";
-		};
 		DC86F69626100F0C00696363 /* Tests */ = {
 			isa = PBXGroup;
 			children = (
+				DC86F76126101E0300696363 /* NogTests.swift */,
+				DC86F76026101E0300696363 /* XCTestManifests.swift */,
 				DC86F69826100F3200696363 /* Info.plist */,
-				DC86F69726100F2000696363 /* NogTests */,
 			);
 			name = Tests;
 			sourceTree = "<group>";
 		};
-		DC86F69726100F2000696363 /* NogTests */ = {
+		DC86F76A26101E8400696363 /* Sources */ = {
 			isa = PBXGroup;
 			children = (
-				DC86F6A226100F4300696363 /* NogTests.swift */,
-				DC86F6A326100F4300696363 /* XCTestManifests.swift */,
+				DC86F75626101DC100696363 /* Nog.swift */,
 			);
-			path = NogTests;
-			sourceTree = "<group>";
-		};
-		DC86F6AA26100F6200696363 /* Nog */ = {
-			isa = PBXGroup;
-			children = (
-				DC86F6B326100F7D00696363 /* Nog.swift */,
-			);
-			path = Nog;
+			name = Sources;
 			sourceTree = "<group>";
 		};
 		DC8904D926100269008D2B5F = {
 			isa = PBXGroup;
 			children = (
-				DC86F69526100F0100696363 /* Sources */,
+				DC86F76A26101E8400696363 /* Sources */,
 				DC86F69626100F0C00696363 /* Tests */,
 				DC8904E426100269008D2B5F /* Products */,
 			);
@@ -214,7 +196,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				DC86F6B426100F7D00696363 /* Nog.swift in Sources */,
+				DC86F75726101DC100696363 /* Nog.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -222,8 +204,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				DC86F6A426100F4300696363 /* NogTests.swift in Sources */,
-				DC86F6A526100F4300696363 /* XCTestManifests.swift in Sources */,
+				DC86F76326101E0300696363 /* NogTests.swift in Sources */,
+				DC86F76226101E0300696363 /* XCTestManifests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -290,7 +272,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 14.4;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -348,7 +330,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 14.4;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				SDKROOT = iphoneos;
