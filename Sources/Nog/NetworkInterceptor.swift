@@ -44,8 +44,8 @@ public struct RequestRedirector {
     
     @objc public static let shared = NetworkInterceptor()
     let networkRequestInterceptor = NetworkRequestInterceptor()
-    let consoleLogger = ConsoleLoggerSniffableRequestHandler()
     var config: NetworkInterceptorConfig?
+    var requestCount = 0
     
     public func setup(config: NetworkInterceptorConfig){
         self.config = config
@@ -65,7 +65,9 @@ public struct RequestRedirector {
         }
         for sniffer in config.requestSniffers {
             if sniffer.requestEvaluator.isActionAllowed(urlRequest: urlRequest) {
-                consoleLogger.sniffRequest(urlRequest: urlRequest)
+                requestCount = requestCount + 1
+                let loggableText = "Request #\(requestCount): CURL => \(urlRequest.description)"
+                print(loggableText)
             }
         }
     }
