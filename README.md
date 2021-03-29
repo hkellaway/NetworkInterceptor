@@ -3,6 +3,7 @@
 [![Swift](https://img.shields.io/badge/Swift-5.3-orange.svg)](https://swift.org/about/)
 [![SPM](https://img.shields.io/badge/SPM-compatible-brightgreen.svg)](https://swift.org/package-manager/)
 [![License](https://img.shields.io/badge/License-MIT-lightgray.svg)](https://raw.githubusercontent.com/hkellaway/Nog/main/LICENSE)
+[![Build Status](https://github.com/hkellaway/Nog/actions/workflows/build.yml/badge.svg)](https://github.com/hkellaway/Nog/actions)
 
 ## Usage
 
