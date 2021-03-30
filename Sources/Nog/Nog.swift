@@ -43,6 +43,10 @@ open class NetworkLogger {
 
     /// Number of requests made since start.
     public private(set) var requestCount = 0
+
+    // MARK: Private properties
+
+    private let adapter: NetworkLoggerUrlProtocolAdapter
     
     // MARK: Init/Deinit
 
@@ -53,19 +57,13 @@ open class NetworkLogger {
         ])
     }
     
-    public init(requestFilters: [RequestFilter]) {
+    public init(requestFilters: [RequestFilter],
+                adapter: NetworkLoggerUrlProtocolAdapter = NetworkLoggerUrlProtocolAdapter()) {
         self.requestFilters = requestFilters
+        self.adapter = adapter
+        self.adapter.logRequest = self.logRequest
+    }
 
-        NotificationCenter._nog.addObserver(self,
-                                            selector: #selector(logRequestFromUrlProtocol(_:)),
-                                            name: ._logRequest,
-                                            object: nil)
-    }
-    
-    deinit {
-        NotificationCenter._nog.removeObserver(self)
-    }
-    
     // MARK: Public instance functions
     
     /// Starts recording of network requests.
@@ -106,6 +104,7 @@ open class NetworkLogger {
         return .failure(.requestRejectedByFilter)
       }
 
+      requestCount = requestCount + 1
       print("[Nog] Request #\(requestCount): URL => \(urlRequest.description)")
       return .success(())
     }
@@ -121,20 +120,43 @@ open class NetworkLogger {
         method_exchangeImplementations(method1, method2)
     }
 
-    @objc
-    private func logRequestFromUrlProtocol(_ notification: Notification) {
-        guard let urlRequest = notification.object as? URLRequest else {
-            return
-        }
-        requestCount = requestCount + 1
-        logRequest(urlRequest)
+}
+
+// MARK: NetworkLoggerUrlProtocolAdapter
+
+/// Adapts output from UrlProtocol interception for use by NetworkLogger.
+open class NetworkLoggerUrlProtocolAdapter {
+
+  var logRequest: ((URLRequest) -> Result<(), NetworkLoggerError>)?
+
+  public init() {
+    NotificationCenter._nog.addObserver(self,
+                                        selector: #selector(logRequestFromUrlProtocol(_:)),
+                                        name: ._logRequest,
+                                        object: nil)
+  }
+
+  deinit {
+    NotificationCenter._nog.removeObserver(self)
+  }
+
+  public func requestReceived(_ urlRequest: URLRequest) {
+    let _ = logRequest?(urlRequest)
+  }
+
+  @objc
+  private func logRequestFromUrlProtocol(_ notification: Notification) {
+    guard let urlRequest = notification.object as? URLRequest else {
+      return
     }
+    requestReceived(urlRequest)
+  }
 
 }
 
 // MARK: NetworkLoggerUrlProtocol
 
-class NetworkLoggerUrlProtocol: URLProtocol {
+internal class NetworkLoggerUrlProtocol: URLProtocol {
     
     open override class func canInit(with request: URLRequest) -> Bool {
         if let httpHeaders = request.allHTTPHeaderFields, httpHeaders.isEmpty {
