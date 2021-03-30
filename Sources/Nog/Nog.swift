@@ -102,7 +102,7 @@ open class NetworkLogger {
 
     @discardableResult
     open func logRequest(_ urlRequest: URLRequest) -> Result<(), NetworkLoggerError> {
-      guard (requestFilters.reduce(true) { $0 && $1(urlRequest) }) else {
+      guard isLogging, (requestFilters.reduce(true) { $0 && $1(urlRequest) }) else {
         return .failure(.requestRejectedByFilter)
       }
 
