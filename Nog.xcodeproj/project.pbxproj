@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		2FF19BAA26130A140000EFA7 /* MockAdapter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FF19BA926130A140000EFA7 /* MockAdapter.swift */; };
 		2FF19BB026130B960000EFA7 /* MockURLRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FF19BAF26130B960000EFA7 /* MockURLRequest.swift */; };
+		2FF19F4F261367EB0000EFA7 /* MockConsole.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FF19F4E261367EB0000EFA7 /* MockConsole.swift */; };
 		DC86F75726101DC100696363 /* Nog.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC86F75626101DC100696363 /* Nog.swift */; };
 		DC86F76226101E0300696363 /* XCTestManifests.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC86F76026101E0300696363 /* XCTestManifests.swift */; };
 		DC86F76326101E0300696363 /* NogTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC86F76126101E0300696363 /* NogTests.swift */; };
@@ -28,6 +29,7 @@
 /* Begin PBXFileReference section */
 		2FF19BA926130A140000EFA7 /* MockAdapter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockAdapter.swift; sourceTree = "<group>"; };
 		2FF19BAF26130B960000EFA7 /* MockURLRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockURLRequest.swift; sourceTree = "<group>"; };
+		2FF19F4E261367EB0000EFA7 /* MockConsole.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockConsole.swift; sourceTree = "<group>"; };
 		DC86F69826100F3200696363 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = Tests/Info.plist; sourceTree = "<group>"; };
 		DC86F75626101DC100696363 /* Nog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = Nog.swift; path = Sources/Nog/Nog.swift; sourceTree = "<group>"; };
 		DC86F76026101E0300696363 /* XCTestManifests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = XCTestManifests.swift; path = Tests/NogTests/XCTestManifests.swift; sourceTree = "<group>"; };
@@ -59,6 +61,7 @@
 			isa = PBXGroup;
 			children = (
 				2FF19BA926130A140000EFA7 /* MockAdapter.swift */,
+				2FF19F4E261367EB0000EFA7 /* MockConsole.swift */,
 				2FF19BAF26130B960000EFA7 /* MockURLRequest.swift */,
 			);
 			name = Mocks;
@@ -218,6 +221,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2FF19F4F261367EB0000EFA7 /* MockConsole.swift in Sources */,
 				DC86F76326101E0300696363 /* NogTests.swift in Sources */,
 				2FF19BB026130B960000EFA7 /* MockURLRequest.swift in Sources */,
 				2FF19BAA26130A140000EFA7 /* MockAdapter.swift in Sources */,

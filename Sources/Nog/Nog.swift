@@ -37,6 +37,9 @@ open class NetworkLogger {
     /// Filters called when a request is logged, giving client a chance to determine whether
     /// request should be logged or not.
     public let requestFilters: [RequestFilter]
+
+    /// View where logs are displayed.
+    public private(set) var view: NetworkLoggerView!
     
     /// Whether network logging is currently on.
     public private(set) var isLogging = false
@@ -49,7 +52,11 @@ open class NetworkLogger {
     }
 
     /// Number of requests made since start.
-    public private(set) var requestCount = 0
+    public private(set) var requestCount = 0 {
+      didSet {
+        (view as? ConsoleNetworkLoggerView)?.requestCount = requestCount
+      }
+    }
 
     // MARK: Private properties
 
@@ -75,6 +82,7 @@ open class NetworkLogger {
 
         self.adapter.logRequest = self.logRequest
         self.console.turn(on: verbose)
+        self.attachView(ConsoleNetworkLoggerView(console: console))
     }
 
     // MARK: Public instance functions
@@ -118,8 +126,12 @@ open class NetworkLogger {
       }
 
       requestCount = requestCount + 1
-      console.debugPrint("Request #\(requestCount): URL => \(urlRequest.description)")
+      view.displayRequest(urlRequest)
       return true
+    }
+
+    open func attachView(_ view: NetworkLoggerView) {
+      self.view = view
     }
     
     // MARK: Private instance functions
@@ -190,6 +202,29 @@ internal class NetworkLoggerUrlProtocol: URLProtocol {
         return mutableRequest.copy() as! URLRequest
     }
     
+}
+
+// MARK: NetworkLoggerView
+
+/// View to display requests.
+public protocol NetworkLoggerView {
+  func displayRequest(_ urlRequest: URLRequest)
+}
+
+/// View that displays requests to console. Deafult if no view provided.
+public class ConsoleNetworkLoggerView: NetworkLoggerView {
+
+  public let console: NogConsole
+  var requestCount: Int = 0
+
+  public init(console: NogConsole) {
+    self.console = console
+  }
+
+  public func displayRequest(_ urlRequest: URLRequest) {
+    console.debugPrint("Request #\(requestCount): URL => \(urlRequest.description)")
+  }
+
 }
 
 // MARK: NogConsole

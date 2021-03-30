@@ -12,10 +12,12 @@ class NogTests: XCTestCase {
 
   var sut: NetworkLogger!
   var mockAdapter: MockAdapter!
+  var mockConsole: MockConsole!
 
   override func setUp() {
     let defaultFilters = NetworkLogger().requestFilters
     mockAdapter = MockAdapter()
+    mockConsole = MockConsole()
     sut = NetworkLogger(requestFilters: defaultFilters,
                         adapter: mockAdapter)
   }
@@ -24,12 +26,18 @@ class NogTests: XCTestCase {
     sut.stop()
     sut = nil
     mockAdapter = nil
+    mockConsole = nil
   }
 
   // MARK: - NetworkLogger
 
   func test_networkLogger_onInit_isNotLogging() {
     XCTAssertFalse(sut.isLogging)
+  }
+
+  func test_networkLogger_onInit_usesConsoleView() {
+    let sutDefault = NetworkLogger()
+    XCTAssertTrue(sutDefault.view is ConsoleNetworkLoggerView)
   }
 
   func test_networkLogger_onStart_isLogging() {
@@ -85,6 +93,18 @@ class NogTests: XCTestCase {
   func test_networkLogger_onRequest_printsURLToConsole() {
     let todo = "TODO"
     XCTAssertTrue(todo == "TODO")
+  }
+
+  // MARK: - NetworkLoggerView
+
+  func test_consoleNetworkLoggerView_printsRequest() {
+    let sutView = ConsoleNetworkLoggerView(console: mockConsole)
+    sut.start()
+    sut.attachView(sutView)
+    mockAdapter.sendMockRequest()
+    mockAdapter.sendMockRequest()
+    mockAdapter.sendMockRequest()
+    XCTAssertEqual(mockConsole.lastMessage, "Request #3: URL => https://github.com")
   }
 
   // MARK: - NogConsole
