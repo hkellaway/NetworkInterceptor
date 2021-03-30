@@ -42,13 +42,15 @@ class NogTests: XCTestCase {
   }
 
   func test_networkLogger_default_filtersOutNonHTTPRequests() {
-    XCTAssertNotNil(try? sut.logRequest(httpsRequest).get())
-    XCTAssertNil(try? sut.logRequest(nonHttpRequest).get())
+    sut.start()
+    XCTAssertTrue(sut.logRequest(httpsRequest))
+    XCTAssertFalse(sut.logRequest(nonHttpRequest))
   }
 
   func test_networkLogger_emptyRequestFilters_allowsNonHTTPRequests() {
-    let sut = NetworkLogger(requestFilters: [])
-    XCTAssertNotNil(try? sut.logRequest(nonHttpRequest).get())
+    let sutNoFilters = NetworkLogger(requestFilters: [])
+    sutNoFilters.start()
+    XCTAssertTrue(sutNoFilters.logRequest(nonHttpRequest))
   }
 
   // MARK: - RequestFilter

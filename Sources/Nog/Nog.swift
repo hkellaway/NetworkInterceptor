@@ -99,14 +99,14 @@ open class NetworkLogger {
     }
 
     @discardableResult
-    open func logRequest(_ urlRequest: URLRequest) -> Result<(), NetworkLoggerError> {
+    open func logRequest(_ urlRequest: URLRequest) -> Bool {
       guard isLogging, (requestFilters.reduce(true) { $0 && $1(urlRequest) }) else {
-        return .failure(.requestRejectedByFilter)
+        return false
       }
 
       requestCount = requestCount + 1
       print("[Nog] Request #\(requestCount): URL => \(urlRequest.description)")
-      return .success(())
+      return true
     }
     
     // MARK: Private instance functions
@@ -127,7 +127,7 @@ open class NetworkLogger {
 /// Adapts output from UrlProtocol interception for use by NetworkLogger.
 open class NetworkLoggerUrlProtocolAdapter {
 
-  var logRequest: ((URLRequest) -> Result<(), NetworkLoggerError>)?
+  var logRequest: ((URLRequest) -> Bool)?
 
   public init() {
     NotificationCenter._nog.addObserver(self,
@@ -177,12 +177,6 @@ internal class NetworkLoggerUrlProtocol: URLProtocol {
         return mutableRequest.copy() as! URLRequest
     }
     
-}
-
-// MARK: NetworkLoggerError
-
-public enum NetworkLoggerError: Error {
-  case requestRejectedByFilter
 }
 
 // MARK: - Request Filter
