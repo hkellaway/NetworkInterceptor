@@ -87,6 +87,20 @@ class NogTests: XCTestCase {
     XCTAssertTrue(todo == "TODO")
   }
 
+  // MARK: - NogConsole
+
+  func test_console_whenOn_prints() {
+    let sut = NogConsole()
+    sut.turn(on: true)
+    XCTAssertEqual(sut.debugPrint("testing 1 2 3"), "[Nog] testing 1 2 3")
+  }
+
+  func test_console_whenOff_doesNotPrint() {
+    let sut = NogConsole()
+    sut.turn(on: false)
+    XCTAssertTrue(sut.debugPrint("testing 1 2 3").isEmpty)
+  }
+
   // MARK: - RequestFilter
 
   func test_noRequestFilter_allowsAllRequests() {

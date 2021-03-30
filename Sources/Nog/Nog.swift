@@ -41,12 +41,20 @@ open class NetworkLogger {
     /// Whether network logging is currently on.
     public private(set) var isLogging = false
 
+    /// Whether verbose console logging is on.
+    public var verbose: Bool = true {
+      didSet {
+        console.turn(on: verbose)
+      }
+    }
+
     /// Number of requests made since start.
     public private(set) var requestCount = 0
 
     // MARK: Private properties
 
     private let adapter: NetworkLoggerUrlProtocolAdapter
+    private let console: NogConsole
     
     // MARK: Init/Deinit
 
@@ -58,10 +66,15 @@ open class NetworkLogger {
     }
     
     public init(requestFilters: [RequestFilter],
-                adapter: NetworkLoggerUrlProtocolAdapter = NetworkLoggerUrlProtocolAdapter()) {
+                adapter: NetworkLoggerUrlProtocolAdapter = NetworkLoggerUrlProtocolAdapter(),
+                console: NogConsole = NogConsole(),
+                verbose: Bool = true) {
         self.requestFilters = requestFilters
         self.adapter = adapter
+        self.console = console
+
         self.adapter.logRequest = self.logRequest
+        self.console.turn(on: verbose)
     }
 
     // MARK: Public instance functions
@@ -69,7 +82,7 @@ open class NetworkLogger {
     /// Starts recording of network requests.
     public func start() {
         guard !isLogging else {
-            print("[Nog] Attempt to `start` while already started. Returning.")
+            console.debugPrint("Attempt to `start` while already started. Returning.")
             return
         }
         
@@ -81,7 +94,7 @@ open class NetworkLogger {
     /// Stops recording of networking requests.
     public func stop() {
         guard isLogging else {
-            print("[Nog] Attempt to `stop` while already stopped. Returning.")
+            console.debugPrint("Attempt to `stop` while already stopped. Returning.")
             return
         }
         
@@ -105,7 +118,7 @@ open class NetworkLogger {
       }
 
       requestCount = requestCount + 1
-      print("[Nog] Request #\(requestCount): URL => \(urlRequest.description)")
+      console.debugPrint("Request #\(requestCount): URL => \(urlRequest.description)")
       return true
     }
     
@@ -177,6 +190,33 @@ internal class NetworkLoggerUrlProtocol: URLProtocol {
         return mutableRequest.copy() as! URLRequest
     }
     
+}
+
+// MARK: NogConsole
+
+/// Prints to console including [Nog] identifier.
+public class NogConsole {
+
+  private(set) var isOn: Bool
+
+  public init() {
+    self.isOn = false
+  }
+
+  public func turn(on isOn: Bool) {
+    self.isOn = isOn
+  }
+
+  @discardableResult
+  public func debugPrint(_ message: String) -> String {
+    guard isOn else {
+      return ""
+    }
+    let message = "[Nog] \(message)"
+    print(message)
+    return message
+  }
+
 }
 
 // MARK: - Request Filter
