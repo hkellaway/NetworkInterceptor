@@ -8,10 +8,15 @@ jobs:
     env:
       XC_VERSION: ${{ '12.4' }}
       XC_PROJ: ${{ 'Nog.xcodeproj' }}
-      XC_SCHEME: ${{ 'NogTests' }}
+      XC_TEST_SCHEME: ${{ 'NogTests' }}
+      DEMO_XC_PROJ: ${{ 'NogDemo.xcodeproj' }}
+      DEMO_XC_SCHEME: ${{ 'NogDemo' }}
     steps:
     - name: Select latest Xcode
       run: "sudo xcode-select -s /Applications/Xcode_$XC_VERSION.app"
     - uses: actions/checkout@v2
     - name: Run tests
-      run: /usr/bin/xcodebuild test -project "$XC_PROJ" -scheme "$XC_SCHEME" -destination 'platform=iOS Simulator,name=iPhone 12'
+      run: /usr/bin/xcodebuild test -project "$XC_PROJ" -scheme "$XC_TEST_SCHEME" -destination 'platform=iOS Simulator,name=iPhone 12'
+    - name: Build Demo project
+      working-directory: Demo
+      run: /usr/bin/xcodebuild -project "$DEMO_XC_PROJ" -scheme "$DEMO_XC_SCHEME" -destination 'platform=iOS Simulator,name=iPhone 12'
