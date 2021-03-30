@@ -34,7 +34,7 @@ open class NetworkLogger {
     
     // MARK: Public properties
 
-    /// Function called when a request is logged, giving client a chance to determine whether
+    /// Filters called when a request is logged, giving client a chance to determine whether
     /// request should be logged or not.
     public let requestFilters: [RequestFilter]
     
@@ -46,11 +46,10 @@ open class NetworkLogger {
     
     // MARK: Init/Deinit
 
-    public convenience init(filter: ((URLRequest) -> Bool)? = nil) {
-        let noOp: ((URLRequest) -> Bool) = { _ in return true }
+    public convenience init(filter customRequestFilter: RequestFilter? = nil) {
         self.init(requestFilters: [
-          .httpOnly,
-          InjectableRequestFilter(evaluate: filter ?? noOp),
+          httpOnlyRequestFilter,
+          (customRequestFilter ?? noRequestFilter),
         ])
     }
     
@@ -103,7 +102,7 @@ open class NetworkLogger {
 
     @discardableResult
     open func logRequest(_ urlRequest: URLRequest) -> Result<(), NetworkLoggerError> {
-      guard (requestFilters.reduce(true) { $0 && $1.evaluate(urlRequest) }) else {
+      guard (requestFilters.reduce(true) { $0 && $1(urlRequest) }) else {
         return .failure(.requestRejectedByFilter)
       }
 
@@ -166,43 +165,19 @@ public enum NetworkLoggerError: Error {
 
 // MARK: - Request Filter
 
-open class RequestFilter {
+public typealias RequestFilter = (URLRequest) -> Bool
 
-  public init() { }
-
-  open func evaluate(_ request: URLRequest) -> Bool {
-    return true
-  }
-
+/// Request filter that allows all requests through.
+public let noRequestFilter: RequestFilter = { _ in
+  return true
 }
 
-public class HttpRequestFilter: RequestFilter {
-
-  public override func evaluate(_ request: URLRequest) -> Bool {
-    return request.url?.scheme.flatMap { ["https", "http"].contains($0) } ?? false
-  }
-
-}
-
-public class InjectableRequestFilter: RequestFilter {
-
-  public let handler: (URLRequest) -> Bool
-
-  public init(evaluate: @escaping (URLRequest) -> Bool) {
-    self.handler = evaluate
-  }
-
-  public override func evaluate(_ request: URLRequest) -> Bool {
-    handler(request)
-  }
-
+/// Request filter that only allows https or http requests through.
+public let httpOnlyRequestFilter: RequestFilter = {
+  $0.url?.scheme.flatMap { ["https", "http"].contains($0) } ?? false
 }
 
 // MARK: - Extensions
-
-public extension RequestFilter {
-  static let httpOnly = HttpRequestFilter()
-}
 
 // MARK: URLSessionConfiguration
 
