@@ -36,7 +36,7 @@ public class NetworkLogger {
 
     /// Function called when a request is logged, giving client a chance to determine whether
     /// request should be logged or not.
-    public let allowRequest: ((URLRequest) -> Bool)?
+    public let requestFilters: [RequestFilter]
     
     /// Whether network logging is currently on.
     public private(set) var isLogging = false
@@ -46,9 +46,17 @@ public class NetworkLogger {
     private var requestCount = 0
     
     // MARK: Init/Deinit
+
+    public convenience init(allowRequest: ((URLRequest) -> Bool)? = nil) {
+        let noOp: ((URLRequest) -> Bool) = { _ in return true }
+        self.init(requestFilters: [
+          HttpRequestFilter(),
+          InjectableRequestFilter(allowRequest: allowRequest ?? noOp),
+        ])
+    }
     
-    public init(allowRequest: ((URLRequest) -> Bool)? = nil) {
-        self.allowRequest = allowRequest
+    public init(requestFilters: [RequestFilter]) {
+        self.requestFilters = requestFilters
 
         NotificationCenter._nog.addObserver(self, selector: #selector(logRequest(_:)), name: ._logRequest, object: nil)
     }
@@ -101,19 +109,17 @@ public class NetworkLogger {
 
         method_exchangeImplementations(method1, method2)
     }
-    
+
     @objc private func logRequest(_ notification: Notification) {
         guard let urlRequest = notification.object as? URLRequest,
-              allowRequest?(urlRequest) == true,
-              let scheme = urlRequest.url?.scheme,
-              ["https", "http"].contains(scheme) else {
+              (requestFilters.reduce(true) { $0 && $1.allowRequest(urlRequest) }) else {
             return
         }
-        
+
         requestCount = requestCount + 1
         print("[Nog] Request #\(requestCount): URL => \(urlRequest.description)")
     }
-    
+
 }
 
 // MARK: - NetworkLoggerUrlProtocol
@@ -139,6 +145,40 @@ class NetworkLoggerUrlProtocol: URLProtocol {
         return mutableRequest.copy() as! URLRequest
     }
     
+}
+
+// MARK: - Request Filter
+
+open class RequestFilter {
+
+  public init() { }
+
+  open func allowRequest(_ request: URLRequest) -> Bool {
+    return true
+  }
+
+}
+
+public class HttpRequestFilter: RequestFilter {
+
+  public override func allowRequest(_ request: URLRequest) -> Bool {
+    return request.url?.scheme.flatMap { ["https", "http"].contains($0) } ?? false
+  }
+
+}
+
+public class InjectableRequestFilter: RequestFilter {
+
+  public let handler: (URLRequest) -> Bool
+
+  public init(allowRequest: @escaping (URLRequest) -> Bool) {
+    self.handler = allowRequest
+  }
+
+  public override func allowRequest(_ request: URLRequest) -> Bool {
+    handler(request)
+  }
+
 }
 
 // MARK: - Extensions
