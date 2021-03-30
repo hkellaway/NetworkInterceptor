@@ -33,6 +33,10 @@ import Foundation
 public class NetworkLogger {
     
     // MARK: Public properties
+
+    /// Function called when a request is logged, giving client a chance to determine whether
+    /// request should be logged or not.
+    public let allowRequest: ((URLRequest) -> Bool)?
     
     /// Whether network logging is currently on.
     public private(set) var isLogging = false
@@ -43,7 +47,9 @@ public class NetworkLogger {
     
     // MARK: Init/Deinit
     
-    public init() {
+    public init(allowRequest: ((URLRequest) -> Bool)? = nil) {
+        self.allowRequest = allowRequest
+
         NotificationCenter._nog.addObserver(self, selector: #selector(logRequest(_:)), name: ._logRequest, object: nil)
     }
     
@@ -98,6 +104,7 @@ public class NetworkLogger {
     
     @objc private func logRequest(_ notification: Notification) {
         guard let urlRequest = notification.object as? URLRequest,
+              allowRequest?(urlRequest) == true,
               let scheme = urlRequest.url?.scheme,
               ["https", "http"].contains(scheme) else {
             return
@@ -147,8 +154,7 @@ extension URLSessionConfiguration {
         guard let injectedProtocolClasses = self._injectedProtocolClasses() else {
             return []
         }
-        
-        // Ensure NetworkLoggerUrlProtocol is present and not duplicated
+
         var protocolClasses = injectedProtocolClasses.filter {
             return $0 != NetworkLoggerUrlProtocol.self
         }
@@ -161,10 +167,8 @@ extension URLSessionConfiguration {
 // MARK: NotificationCenter
 
 internal extension NotificationCenter {
-    
-    /// Private NotificationCenter to keep usage of notifications an implementation detail.
+    // Private NotificationCenter to keep usage of notifications an implementation detail
     static var _nog = NotificationCenter()
-    
 }
 
 // MARK: Notification.Name
