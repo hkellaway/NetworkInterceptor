@@ -30,7 +30,7 @@ import Foundation
 // MARK: - NetworkLogger
 
 /// Manages whether network logging is on and reactions to network requests.
-public class NetworkLogger {
+open class NetworkLogger {
     
     // MARK: Public properties
 
@@ -40,10 +40,9 @@ public class NetworkLogger {
     
     /// Whether network logging is currently on.
     public private(set) var isLogging = false
-    
-    // MARK: Private properties
-    
-    private var requestCount = 0
+
+    /// Number of requests made since start.
+    public private(set) var requestCount = 0
     
     // MARK: Init/Deinit
 
@@ -58,7 +57,10 @@ public class NetworkLogger {
     public init(requestFilters: [RequestFilter]) {
         self.requestFilters = requestFilters
 
-        NotificationCenter._nog.addObserver(self, selector: #selector(logRequest(_:)), name: ._logRequest, object: nil)
+        NotificationCenter._nog.addObserver(self,
+                                            selector: #selector(logRequestFromUrlProtocol(_:)),
+                                            name: ._logRequest,
+                                            object: nil)
     }
     
     deinit {
@@ -98,6 +100,16 @@ public class NetworkLogger {
             start()
         }
     }
+
+    @discardableResult
+    open func logRequest(_ urlRequest: URLRequest) -> Result<(), NetworkLoggerError> {
+      guard (requestFilters.reduce(true) { $0 && $1.evaluate(urlRequest) }) else {
+        return .failure(.requestRejectedByFilter)
+      }
+
+      print("[Nog] Request #\(requestCount): URL => \(urlRequest.description)")
+      return .success(())
+    }
     
     // MARK: Private instance functions
     
@@ -110,19 +122,18 @@ public class NetworkLogger {
         method_exchangeImplementations(method1, method2)
     }
 
-    @objc private func logRequest(_ notification: Notification) {
-        guard let urlRequest = notification.object as? URLRequest,
-              (requestFilters.reduce(true) { $0 && $1.evaluate(urlRequest) }) else {
+    @objc
+    private func logRequestFromUrlProtocol(_ notification: Notification) {
+        guard let urlRequest = notification.object as? URLRequest else {
             return
         }
-
         requestCount = requestCount + 1
-        print("[Nog] Request #\(requestCount): URL => \(urlRequest.description)")
+        logRequest(urlRequest)
     }
 
 }
 
-// MARK: - NetworkLoggerUrlProtocol
+// MARK: NetworkLoggerUrlProtocol
 
 class NetworkLoggerUrlProtocol: URLProtocol {
     
@@ -145,6 +156,12 @@ class NetworkLoggerUrlProtocol: URLProtocol {
         return mutableRequest.copy() as! URLRequest
     }
     
+}
+
+// MARK: NetworkLoggerError
+
+public enum NetworkLoggerError: Error {
+  case requestRejectedByFilter
 }
 
 // MARK: - Request Filter
