@@ -47,11 +47,11 @@ public class NetworkLogger {
     
     // MARK: Init/Deinit
 
-    public convenience init(allowRequest: ((URLRequest) -> Bool)? = nil) {
+    public convenience init(filter: ((URLRequest) -> Bool)? = nil) {
         let noOp: ((URLRequest) -> Bool) = { _ in return true }
         self.init(requestFilters: [
-          HttpRequestFilter(),
-          InjectableRequestFilter(allowRequest: allowRequest ?? noOp),
+          .httpOnly,
+          InjectableRequestFilter(evaluate: filter ?? noOp),
         ])
     }
     
@@ -112,7 +112,7 @@ public class NetworkLogger {
 
     @objc private func logRequest(_ notification: Notification) {
         guard let urlRequest = notification.object as? URLRequest,
-              (requestFilters.reduce(true) { $0 && $1.allowRequest(urlRequest) }) else {
+              (requestFilters.reduce(true) { $0 && $1.evaluate(urlRequest) }) else {
             return
         }
 
@@ -153,7 +153,7 @@ open class RequestFilter {
 
   public init() { }
 
-  open func allowRequest(_ request: URLRequest) -> Bool {
+  open func evaluate(_ request: URLRequest) -> Bool {
     return true
   }
 
@@ -161,7 +161,7 @@ open class RequestFilter {
 
 public class HttpRequestFilter: RequestFilter {
 
-  public override func allowRequest(_ request: URLRequest) -> Bool {
+  public override func evaluate(_ request: URLRequest) -> Bool {
     return request.url?.scheme.flatMap { ["https", "http"].contains($0) } ?? false
   }
 
@@ -171,17 +171,21 @@ public class InjectableRequestFilter: RequestFilter {
 
   public let handler: (URLRequest) -> Bool
 
-  public init(allowRequest: @escaping (URLRequest) -> Bool) {
-    self.handler = allowRequest
+  public init(evaluate: @escaping (URLRequest) -> Bool) {
+    self.handler = evaluate
   }
 
-  public override func allowRequest(_ request: URLRequest) -> Bool {
+  public override func evaluate(_ request: URLRequest) -> Bool {
     handler(request)
   }
 
 }
 
 // MARK: - Extensions
+
+public extension RequestFilter {
+  static let httpOnly = HttpRequestFilter()
+}
 
 // MARK: URLSessionConfiguration
 
