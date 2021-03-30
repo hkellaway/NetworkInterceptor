@@ -131,8 +131,8 @@ open class NetworkLoggerUrlProtocolAdapter {
 
   public init() {
     NotificationCenter._nog.addObserver(self,
-                                        selector: #selector(logRequestFromUrlProtocol(_:)),
-                                        name: ._logRequest,
+                                        selector: #selector(unwrapRequestFromNotification(_:)),
+                                        name: ._urlProtocolReceivedRequest,
                                         object: nil)
   }
 
@@ -145,7 +145,7 @@ open class NetworkLoggerUrlProtocolAdapter {
   }
 
   @objc
-  private func logRequestFromUrlProtocol(_ notification: Notification) {
+  private func unwrapRequestFromNotification(_ notification: Notification) {
     guard let urlRequest = notification.object as? URLRequest else {
       return
     }
@@ -167,7 +167,7 @@ internal class NetworkLoggerUrlProtocol: URLProtocol {
             return false
         }
         
-        NotificationCenter._nog.post(name: ._logRequest, object: request)
+        NotificationCenter._nog.post(name: ._urlProtocolReceivedRequest, object: request)
         return false
     }
     
@@ -226,5 +226,5 @@ internal extension NotificationCenter {
 // MARK: Notification.Name
 
 internal extension Notification.Name {
-    static let _logRequest = Notification.Name("NogNetworkLoggerRequest")
+    static let _urlProtocolReceivedRequest = Notification.Name("NogNetworkLoggerRequest")
 }
