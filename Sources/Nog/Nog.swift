@@ -25,7 +25,7 @@
 //
 //
 
-import Foundation
+import UIKit
 
 // MARK: - NetworkLogger
 
@@ -250,6 +250,88 @@ public class NogConsole {
     let message = "[Nog] \(message)"
     print(message)
     return message
+  }
+
+}
+
+// MARK: NetworkLoggerViewController
+
+open class NetworkLoggerViewController: UIViewController, NetworkLoggerView {
+
+  var requestHistory: [URLRequest] {
+    return requests.reversed()
+  }
+
+  private var requests: [URLRequest] = []
+
+  private let tableView = UITableView(frame: .zero)
+
+  open override func viewDidLoad() {
+    super.viewDidLoad()
+
+    tableView.dataSource = self
+    tableView.delegate = self
+
+    view.addSubview(tableView)
+    tableView.translatesAutoresizingMaskIntoConstraints = false
+    NSLayoutConstraint.activate([
+      tableView.topAnchor.constraint(equalTo: view.topAnchor),
+      tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+      tableView.widthAnchor.constraint(equalTo: view.widthAnchor),
+      tableView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+      tableView.centerYAnchor.constraint(equalTo: view.centerYAnchor)
+    ])
+  }
+
+  open func displayRequest(_ urlRequest: URLRequest) {
+    requests.append(urlRequest)
+
+    DispatchQueue.main.async { [weak self] in
+      self?.tableView.reloadData()
+    }
+  }
+
+}
+
+extension NetworkLoggerViewController: UITableViewDataSource {
+
+  public func numberOfSections(in tableView: UITableView) -> Int {
+    return 1
+  }
+
+  public func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    return requestHistory.count
+  }
+
+  public func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+    let request = requestHistory[indexPath.row]
+    let cell = UITableViewCell()
+    cell.textLabel?.numberOfLines = 2
+    cell.textLabel?.text = request.description
+    return cell
+  }
+
+}
+
+extension NetworkLoggerViewController: UITableViewDelegate {
+
+  public func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+    let request = requestHistory[indexPath.row]
+    let modal = UIViewController()
+    let textView = UITextView()
+    textView.text = request.description
+    textView.isUserInteractionEnabled = false
+    modal.view.addSubview(textView)
+    textView.translatesAutoresizingMaskIntoConstraints = false
+    NSLayoutConstraint.activate([
+      textView.topAnchor.constraint(equalTo: modal.view.topAnchor),
+      textView.bottomAnchor.constraint(equalTo: modal.view.bottomAnchor),
+      textView.widthAnchor.constraint(equalTo: modal.view.widthAnchor),
+      textView.centerXAnchor.constraint(equalTo: modal.view.centerXAnchor),
+      textView.centerYAnchor.constraint(equalTo: modal.view.centerYAnchor)
+    ])
+    modal.modalPresentationStyle = .popover
+    present(modal, animated: true, completion: nil)
   }
 
 }
