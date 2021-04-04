@@ -25,6 +25,7 @@
 //
 //
 
+import SwiftUI
 import UIKit
 
 // MARK: - NetworkLogger
@@ -39,7 +40,7 @@ open class NetworkLogger {
     public let requestFilters: [RequestFilter]
 
     /// View where logs are displayed.
-    public private(set) var view: NetworkLoggerView!
+    public private(set) var view: NetworkLogDisplayable!
     
     /// Whether network logging is currently on.
     public private(set) var isLogging = false
@@ -61,7 +62,7 @@ open class NetworkLogger {
     // MARK: Private properties
 
     private let adapter: NetworkLoggerUrlProtocolAdapter
-    private let console: NogConsole
+    internal let console: NogConsole
     
     // MARK: Init/Deinit
 
@@ -130,7 +131,7 @@ open class NetworkLogger {
       return true
     }
 
-    open func attachView(_ view: NetworkLoggerView) {
+    open func attachView(_ view: NetworkLogDisplayable) {
       self.view = view
     }
     
@@ -207,12 +208,12 @@ internal class NetworkLoggerUrlProtocol: URLProtocol {
 // MARK: NetworkLoggerView
 
 /// View to display requests.
-public protocol NetworkLoggerView {
+public protocol NetworkLogDisplayable {
   func displayRequest(_ urlRequest: URLRequest)
 }
 
 /// View that displays requests to console. Deafult if no view provided.
-public class ConsoleNetworkLoggerView: NetworkLoggerView {
+public class ConsoleNetworkLoggerView: NetworkLogDisplayable {
 
   public let console: NogConsole
   var requestCount: Int = 0
@@ -256,7 +257,27 @@ public class NogConsole {
 
 // MARK: NetworkLoggerViewController
 
-open class NetworkLoggerViewController: UIViewController, NetworkLoggerView {
+public struct NetworkLoggerView: UIViewControllerRepresentable {
+    
+    public let networkLogger: NetworkLogger
+    
+    public init(networkLogger: NetworkLogger) {
+        self.networkLogger = networkLogger
+    }
+    
+    public func makeUIViewController(context: Context) -> NetworkLoggerViewController {
+        guard let instance = networkLogger.view as? NetworkLoggerViewController else {
+            networkLogger.console.debugPrint("To use NetworkLoggerView effectively, make sure NetworkLogger has a NetworkLoggerViewController as its view.")
+            return NetworkLoggerViewController()
+        }
+        return instance
+    }
+    
+    public func updateUIViewController(_ uiViewController: NetworkLoggerViewController, context: Context) { }
+    
+}
+
+open class NetworkLoggerViewController: UIViewController, NetworkLogDisplayable {
 
   var requestHistory: [URLRequest] {
     return requests.reversed()
