@@ -285,6 +285,7 @@ open class NetworkLoggerViewController: UIViewController, NetworkLogDisplayable 
 
   private var requests: [URLRequest] = []
 
+  private let actionMenuButton = UIButton(frame: .zero)
   private let tableView = UITableView(frame: .zero)
 
   open override func viewDidLoad() {
@@ -292,16 +293,22 @@ open class NetworkLoggerViewController: UIViewController, NetworkLogDisplayable 
 
     tableView.dataSource = self
     tableView.delegate = self
-
-    view.addSubview(tableView)
-    tableView.translatesAutoresizingMaskIntoConstraints = false
+    
+    let stackView = UIStackView(arrangedSubviews: [tableView])
+    stackView.axis = .vertical
+    stackView.translatesAutoresizingMaskIntoConstraints = false
+    view.addSubview(stackView)
     NSLayoutConstraint.activate([
-      tableView.topAnchor.constraint(equalTo: view.topAnchor),
-      tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
-      tableView.widthAnchor.constraint(equalTo: view.widthAnchor),
-      tableView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-      tableView.centerYAnchor.constraint(equalTo: view.centerYAnchor)
+      stackView.topAnchor.constraint(equalTo: view.topAnchor),
+      stackView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+      stackView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+      stackView.leadingAnchor.constraint(equalTo: view.leadingAnchor)
     ])
+    
+    actionMenuButton.setTitle("Debug", for: .normal)
+    actionMenuButton.backgroundColor = .systemTeal
+    stackView.insertArrangedSubview(actionMenuButton, at: 0)
+    actionMenuButton.addTarget(self, action: #selector(presentDebugActions), for: .touchUpInside)
   }
 
   open func displayRequest(_ urlRequest: URLRequest) {
@@ -310,6 +317,23 @@ open class NetworkLoggerViewController: UIViewController, NetworkLogDisplayable 
     DispatchQueue.main.async { [weak self] in
       self?.tableView.reloadData()
     }
+  }
+    
+  public func clear() {
+     requests = []
+    DispatchQueue.main.async { [weak self] in
+      self?.tableView.reloadData()
+    }
+  }
+    
+  @objc
+  private func presentDebugActions() {
+    let actionSheet = UIAlertController(title: "Debug", message: nil, preferredStyle: .actionSheet)
+    actionSheet.addAction(.init(title: "Clear", style: .destructive, handler: { [weak self] _ in
+      self?.clear()
+    }))
+    actionSheet.addAction(.init(title: "Cancel", style: .cancel))
+    present(actionSheet, animated: true, completion: nil)
   }
 
 }
