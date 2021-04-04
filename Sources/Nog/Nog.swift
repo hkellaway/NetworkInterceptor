@@ -284,10 +284,20 @@ open class NetworkLoggerViewController: UIViewController, NetworkLogDisplayable 
   }
 
   private var requests: [URLRequest] = []
-
+  private let customDebugActions: [UIAlertAction]
+    
   private let actionMenuButton = UIButton(frame: .zero)
   private let tableView = UITableView(frame: .zero)
-
+    
+  public init(customDebugActions: [UIAlertAction] = []) {
+    self.customDebugActions = customDebugActions
+    super.init(nibName: nil, bundle: nil)
+  }
+    
+  required public init?(coder: NSCoder) {
+    fatalError("init(coder:) has not been implemented")
+  }
+    
   open override func viewDidLoad() {
     super.viewDidLoad()
 
@@ -329,10 +339,13 @@ open class NetworkLoggerViewController: UIViewController, NetworkLogDisplayable 
   @objc
   private func presentDebugActions() {
     let actionSheet = UIAlertController(title: "Debug", message: nil, preferredStyle: .actionSheet)
-    actionSheet.addAction(.init(title: "Clear", style: .destructive, handler: { [weak self] _ in
+    let clearAction: UIAlertAction = .init(title: "Clear", style: .destructive, handler: { [weak self] _ in
       self?.clear()
-    }))
-    actionSheet.addAction(.init(title: "Cancel", style: .cancel))
+    })
+    let cancelAction: UIAlertAction = .init(title: "Cancel", style: .cancel)
+    actionSheet.addAction(clearAction)
+    customDebugActions.forEach { actionSheet.addAction($0) }
+    actionSheet.addAction(cancelAction)
     present(actionSheet, animated: true, completion: nil)
   }
 
