@@ -309,7 +309,7 @@ open class NetworkLoggerViewController: UIViewController, NetworkLogDisplayable 
     stackView.translatesAutoresizingMaskIntoConstraints = false
     view.addSubview(stackView)
     NSLayoutConstraint.activate([
-      stackView.topAnchor.constraint(equalTo: view.topAnchor),
+      stackView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
       stackView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
       stackView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
       stackView.leadingAnchor.constraint(equalTo: view.leadingAnchor)

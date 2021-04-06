@@ -28,19 +28,34 @@
 import Nog
 import SwiftUI
 
+extension NetworkLogger {
+
+  static var custom: NetworkLogger {
+    let networkLogger = NetworkLogger()
+    networkLogger.attachView(NetworkLoggerViewController())
+    return networkLogger
+  }
+
+}
+
 struct ContentView: View {
     
-    let networkLogger: NetworkLogger = .init()
+  let networkLogger: NetworkLogger = .custom
     let session: URLSession = .init(configuration: .default)
     @State var isLogging = false
+    @State var isPresentingLog = false
     
     var body: some View {
         VStack {
             Button("Make Request", action: makeRequest)
+            Button("Present Log", action: self.presentLog)
             Button("\(isLogging ? "Stop" : "Start") Logging", action: toggleLogging)
                 .foregroundColor(isLogging ? .red : .green)
         }
         .onAppear(perform: toggleLogging)
+        .sheet(isPresented: $isPresentingLog) {
+          NetworkLoggerView(networkLogger: networkLogger)
+        }
     }
     
     func makeRequest() {
@@ -53,6 +68,10 @@ struct ContentView: View {
     func toggleLogging() {
         networkLogger.toggle()
         self.isLogging = networkLogger.isLogging
+    }
+
+    func presentLog() {
+      self.isPresentingLog = true
     }
     
 }
