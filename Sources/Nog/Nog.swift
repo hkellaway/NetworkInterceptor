@@ -284,12 +284,12 @@ open class NetworkLoggerViewController: UIViewController, NetworkLogDisplayable 
   }
 
   private var requests: [URLRequest] = []
-  private let customDebugActions: [UIAlertAction]
+  private let customDebugActions: [(title: String, handler: () -> Void)]
     
   private let actionMenuButton = UIButton(frame: .zero)
   private let tableView = UITableView(frame: .zero)
     
-  public init(customDebugActions: [UIAlertAction] = []) {
+  public init(customDebugActions: [(title: String, handler: () -> Void)] = []) {
     self.customDebugActions = customDebugActions
     super.init(nibName: nil, bundle: nil)
   }
@@ -344,7 +344,7 @@ open class NetworkLoggerViewController: UIViewController, NetworkLogDisplayable 
     })
     let cancelAction: UIAlertAction = .init(title: "Cancel", style: .cancel)
     actionSheet.addAction(clearAction)
-    customDebugActions.forEach { actionSheet.addAction($0) }
+    customDebugActions.forEach { action in actionSheet.addAction(.init(title: action.title, style: .default, handler: { _ in action.handler() })) }
     actionSheet.addAction(cancelAction)
     present(actionSheet, animated: true, completion: nil)
   }
