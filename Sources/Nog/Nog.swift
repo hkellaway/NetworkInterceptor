@@ -252,9 +252,13 @@ public struct NetworkLoggerView: UIViewControllerRepresentable {
 
 open class NetworkLoggerViewController: UIViewController, NetworkLogDisplayable {
 
+  public var sessionConfiguration: URLSessionConfiguration?
+  public var credential: URLCredential?
+  public var authenticationMethod: String? = NSURLAuthenticationMethodDefault
   public private(set) var requestHistory: [URLRequest] = []
 
   private let customDebugActions: [(title: String, handler: () -> Void)]
+  private var lastIndexSelected = -1
     
   private let actionMenuButton = UIButton(frame: .zero)
   private let tableView = UITableView(frame: .zero)
@@ -298,6 +302,21 @@ open class NetworkLoggerViewController: UIViewController, NetworkLogDisplayable 
       self?.tableView.reloadData()
     }
   }
+
+  public func cURLDescriptionForLastSelected() -> String {
+    guard lastIndexSelected >= 0 && lastIndexSelected < requestHistory.count else {
+      return "Invalid"
+    }
+    return cURLDescription(forRequest: requestHistory[lastIndexSelected])
+  }
+
+  public func cURLDescription(forRequest request: URLRequest) -> String {
+    return request.cURLDescription(sessionConfiguration: sessionConfiguration, credential: credential, authenticationMethod: authenticationMethod)
+  }
+
+  public func requestNumber(atIndex index: Int) -> Int {
+    return requestHistory.count - index
+  }
     
   public func clear() {
     requestHistory = []
@@ -312,9 +331,13 @@ open class NetworkLoggerViewController: UIViewController, NetworkLogDisplayable 
     let clearAction: UIAlertAction = .init(title: "Clear", style: .destructive, handler: { [weak self] _ in
       self?.clear()
     })
+    let copyCURL = UIAlertAction(title: "Copy cURL for #\(requestNumber(atIndex: lastIndexSelected))", style: .default, handler: { [weak self] _ in
+      UIPasteboard.general.string = self?.cURLDescriptionForLastSelected() ?? ""
+    })
     let cancelAction: UIAlertAction = .init(title: "Cancel", style: .cancel)
-    actionSheet.addAction(clearAction)
+    actionSheet.addAction(copyCURL)
     customDebugActions.forEach { action in actionSheet.addAction(.init(title: action.title, style: .default, handler: { _ in action.handler() })) }
+    actionSheet.addAction(clearAction)
     actionSheet.addAction(cancelAction)
     present(actionSheet, animated: true, completion: nil)
   }
@@ -335,7 +358,7 @@ extension NetworkLoggerViewController: UITableViewDataSource {
     let request = requestHistory[indexPath.row]
     let cell = UITableViewCell()
     cell.textLabel?.numberOfLines = 2
-    cell.textLabel?.text = "#\(requestHistory.count - indexPath.row) \(request.description)"
+    cell.textLabel?.text = "#\(requestNumber(atIndex: indexPath.row)) \(request.description)"
     return cell
   }
 
@@ -344,19 +367,33 @@ extension NetworkLoggerViewController: UITableViewDataSource {
 extension NetworkLoggerViewController: UITableViewDelegate {
 
   public func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+    self.lastIndexSelected = indexPath.row
+
     let request = requestHistory[indexPath.row]
     let modal = UIViewController()
+    modal.view.backgroundColor = .systemBackground
+    let titleLabel = UILabel()
+    titleLabel.text = "Request #\(requestNumber(atIndex: indexPath.row))"
+    titleLabel.font = .preferredFont(forTextStyle: .title1)
+    modal.view.addSubview(titleLabel)
+    titleLabel.translatesAutoresizingMaskIntoConstraints = false
+    NSLayoutConstraint.activate([
+      titleLabel.leadingAnchor.constraint(equalTo: modal.view.leadingAnchor, constant: 8),
+      titleLabel.topAnchor.constraint(equalTo: modal.view.topAnchor, constant: 8),
+      titleLabel.trailingAnchor.constraint(equalTo: modal.view.trailingAnchor, constant: -8)
+    ])
     let textView = UITextView()
-    textView.text = request.description
+    textView.font = .preferredFont(forTextStyle: .body)
+    textView.text = cURLDescription(forRequest: request)
     textView.isUserInteractionEnabled = false
     modal.view.addSubview(textView)
     textView.translatesAutoresizingMaskIntoConstraints = false
     NSLayoutConstraint.activate([
-      textView.topAnchor.constraint(equalTo: modal.view.topAnchor),
+      textView.leadingAnchor.constraint(equalTo: titleLabel.leadingAnchor),
+      textView.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 8),
+      textView.trailingAnchor.constraint(equalTo: titleLabel.trailingAnchor),
       textView.bottomAnchor.constraint(equalTo: modal.view.bottomAnchor),
-      textView.widthAnchor.constraint(equalTo: modal.view.widthAnchor),
-      textView.centerXAnchor.constraint(equalTo: modal.view.centerXAnchor),
-      textView.centerYAnchor.constraint(equalTo: modal.view.centerYAnchor)
+      textView.widthAnchor.constraint(equalTo: modal.view.widthAnchor)
     ])
     modal.modalPresentationStyle = .popover
     present(modal, animated: true, completion: nil)
@@ -417,9 +454,9 @@ extension URLRequest: CustomCurlStringConvertible {
       guard
           let url = self.url,
           let host = url.host,
-          let method = self.httpMethod else { return "$ curl command could not be created" }
+          let method = self.httpMethod else { return "curl command could not be created" }
 
-      var components = ["$ curl -v"]
+      var components = ["curl -v"]
 
       components.append("-X \(method)")
 

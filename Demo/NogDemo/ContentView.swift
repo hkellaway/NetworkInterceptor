@@ -59,7 +59,7 @@ struct ContentView: View {
     }
     
     func makeRequest() {
-        guard let url = URL(string: "https://github.com") else {
+        guard let url = URL(string: "https://api.github.com/repos/hkellaway/Nog") else {
             return
         }
         self.session.dataTask(with: URLRequest(url: url)).resume()
