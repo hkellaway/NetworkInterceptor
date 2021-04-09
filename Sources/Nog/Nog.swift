@@ -358,7 +358,7 @@ extension NetworkLoggerViewController: UITableViewDataSource {
     let request = requestHistory[indexPath.row]
     let cell = UITableViewCell()
     cell.textLabel?.numberOfLines = 2
-    cell.textLabel?.text = "#\(requestNumber(atIndex: indexPath.row)) \(request.description)"
+    cell.textLabel?.text = "#\(requestNumber(atIndex: indexPath.row)) \(request.httpMethod ?? "") \(request.description)"
     return cell
   }
 
