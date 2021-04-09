@@ -205,7 +205,7 @@ internal class NetworkLoggerUrlProtocol: URLProtocol {
     
 }
 
-// MARK: NetworkLoggerView
+// MARK: NetworkLogDisplayable
 
 /// View to display requests.
 public protocol NetworkLogDisplayable {
@@ -224,33 +224,6 @@ public class ConsoleNetworkLoggerView: NetworkLogDisplayable {
 
   public func displayRequest(_ urlRequest: URLRequest) {
     console.debugPrint("Request #\(requestCount): URL => \(urlRequest.description)")
-  }
-
-}
-
-// MARK: NogConsole
-
-/// Prints to console including [Nog] identifier.
-public class NogConsole {
-
-  private(set) var isOn: Bool
-
-  public init() {
-    self.isOn = false
-  }
-
-  public func turn(on isOn: Bool) {
-    self.isOn = isOn
-  }
-
-  @discardableResult
-  public func debugPrint(_ message: String) -> String {
-    guard isOn else {
-      return ""
-    }
-    let message = "[Nog] \(message)"
-    print(message)
-    return message
   }
 
 }
@@ -390,6 +363,33 @@ extension NetworkLoggerViewController: UITableViewDelegate {
     ])
     modal.modalPresentationStyle = .popover
     present(modal, animated: true, completion: nil)
+  }
+
+}
+
+// MARK: NogConsole
+
+/// Prints to console including [Nog] identifier.
+open class NogConsole {
+
+  private(set) var isOn: Bool
+
+  public init() {
+    self.isOn = false
+  }
+
+  public func turn(on isOn: Bool) {
+    self.isOn = isOn
+  }
+
+  @discardableResult
+  public func debugPrint(_ message: String) -> String {
+    guard isOn else {
+      return ""
+    }
+    let message = "[Nog] \(message)"
+    print(message)
+    return message
   }
 
 }

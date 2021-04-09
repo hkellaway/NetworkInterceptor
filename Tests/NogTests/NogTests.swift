@@ -90,11 +90,6 @@ class NogTests: XCTestCase {
     XCTAssertEqual(sut.requestCount, 3)
   }
 
-  func test_networkLogger_onRequest_printsURLToConsole() {
-    let todo = "TODO"
-    XCTAssertTrue(todo == "TODO")
-  }
-
   // MARK: - NetworkLoggerView
 
   func test_consoleNetworkLoggerView_printsRequest() {
