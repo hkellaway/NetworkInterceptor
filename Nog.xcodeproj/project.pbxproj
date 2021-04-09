@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		2F88C25C2620C629007968C3 /* cURL.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F88C25B2620C629007968C3 /* cURL.swift */; };
 		2FF19BAA26130A140000EFA7 /* MockAdapter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FF19BA926130A140000EFA7 /* MockAdapter.swift */; };
 		2FF19BB026130B960000EFA7 /* MockURLRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FF19BAF26130B960000EFA7 /* MockURLRequest.swift */; };
 		2FF19F4F261367EB0000EFA7 /* MockConsole.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FF19F4E261367EB0000EFA7 /* MockConsole.swift */; };
@@ -27,6 +28,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		2F88C25B2620C629007968C3 /* cURL.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = cURL.swift; path = Sources/Nog/cURL.swift; sourceTree = "<group>"; };
 		2FF19BA926130A140000EFA7 /* MockAdapter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockAdapter.swift; sourceTree = "<group>"; };
 		2FF19BAF26130B960000EFA7 /* MockURLRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockURLRequest.swift; sourceTree = "<group>"; };
 		2FF19F4E261367EB0000EFA7 /* MockConsole.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockConsole.swift; sourceTree = "<group>"; };
@@ -82,6 +84,7 @@
 			isa = PBXGroup;
 			children = (
 				DC86F75626101DC100696363 /* Nog.swift */,
+				2F88C25B2620C629007968C3 /* cURL.swift */,
 			);
 			name = Sources;
 			sourceTree = "<group>";
@@ -214,6 +217,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				DC86F75726101DC100696363 /* Nog.swift in Sources */,
+				2F88C25C2620C629007968C3 /* cURL.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
