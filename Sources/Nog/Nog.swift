@@ -252,11 +252,8 @@ public struct NetworkLoggerView: UIViewControllerRepresentable {
 
 open class NetworkLoggerViewController: UIViewController, NetworkLogDisplayable {
 
-  var requestHistory: [URLRequest] {
-    return requests.reversed()
-  }
+  public private(set) var requestHistory: [URLRequest] = []
 
-  private var requests: [URLRequest] = []
   private let customDebugActions: [(title: String, handler: () -> Void)]
     
   private let actionMenuButton = UIButton(frame: .zero)
@@ -295,7 +292,7 @@ open class NetworkLoggerViewController: UIViewController, NetworkLogDisplayable 
   }
 
   open func displayRequest(_ urlRequest: URLRequest) {
-    requests.append(urlRequest)
+    requestHistory.insert(urlRequest, at: 0)
 
     DispatchQueue.main.async { [weak self] in
       self?.tableView.reloadData()
@@ -303,7 +300,7 @@ open class NetworkLoggerViewController: UIViewController, NetworkLogDisplayable 
   }
     
   public func clear() {
-     requests = []
+    requestHistory = []
     DispatchQueue.main.async { [weak self] in
       self?.tableView.reloadData()
     }
@@ -338,7 +335,7 @@ extension NetworkLoggerViewController: UITableViewDataSource {
     let request = requestHistory[indexPath.row]
     let cell = UITableViewCell()
     cell.textLabel?.numberOfLines = 2
-    cell.textLabel?.text = request.description
+    cell.textLabel?.text = "#\(requestHistory.count - indexPath.row) \(request.description)"
     return cell
   }
 
