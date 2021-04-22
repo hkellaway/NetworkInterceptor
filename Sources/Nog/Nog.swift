@@ -506,6 +506,29 @@ extension URLRequest: CustomCurlStringConvertible {
           components.append("-H \"\(header.name): \(escapedValue)\"")
       }
 
+      if let httpBodyStream = self.httpBodyStream {
+          let httpBodyData = NSMutableData()
+          var buffer = [UInt8](repeating: 0, count: 4096)
+
+          httpBodyStream.open()
+
+          while httpBodyStream.hasBytesAvailable {
+              let length = httpBodyStream.read(&buffer, maxLength: 4096)
+              if length == 0 {
+              } else {
+                httpBodyData.append(&buffer, length: length)
+              }
+          }
+
+          let json = try? JSONSerialization.jsonObject(with: Data(httpBodyData), options: []) as? [String: Any]
+          let jsonData = try? JSONSerialization.data(withJSONObject: json, options: [])
+
+          if let jsonString = jsonData.flatMap { String(data: $0, encoding: .utf8) } {
+            let escapedBody = jsonString.replacingOccurrences(of: "\"", with: "\\\"")
+            components.append("-d \"\(escapedBody)\"")
+          }
+      }
+
       if let httpBodyData = self.httpBody {
           let httpBody = String(decoding: httpBodyData, as: UTF8.self)
           var escapedBody = httpBody.replacingOccurrences(of: "\\\"", with: "\\\\\"")
