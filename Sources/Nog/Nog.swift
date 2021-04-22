@@ -507,25 +507,14 @@ extension URLRequest: CustomCurlStringConvertible {
       }
 
       if let httpBodyStream = self.httpBodyStream {
-          let httpBodyData = NSMutableData()
-          var buffer = [UInt8](repeating: 0, count: 4096)
-
           httpBodyStream.open()
 
-          while httpBodyStream.hasBytesAvailable {
-              let length = httpBodyStream.read(&buffer, maxLength: 4096)
-              if length == 0 {
-              } else {
-                httpBodyData.append(&buffer, length: length)
-              }
-          }
-
-          let json = try? JSONSerialization.jsonObject(with: Data(httpBodyData), options: []) as? [String: Any]
-          let jsonData = try? JSONSerialization.data(withJSONObject: json, options: [])
-
-          if let jsonString = jsonData.flatMap { String(data: $0, encoding: .utf8) } {
+          if let json = try? JSONSerialization.jsonObject(with: httpBodyStream, options: []) as? [String: Any],
+             let jsonData = try? JSONSerialization.data(withJSONObject: json, options: []) {
+            let jsonString = String(decoding: jsonData, as: UTF8.self)
             let escapedBody = jsonString.replacingOccurrences(of: "\"", with: "\\\"")
             components.append("-d \"\(escapedBody)\"")
+            components.append("-H \"Content-Type: text/plain\"")
           }
       }
 
