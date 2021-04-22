@@ -40,15 +40,15 @@ extension NetworkLogger {
 
 struct ContentView: View {
     
-  let networkLogger: NetworkLogger = .custom
+    let networkLogger: NetworkLogger = .custom
     let session: URLSession = .init(configuration: .default)
     @State var isLogging = false
     @State var isPresentingLog = false
     
     var body: some View {
-        VStack {
+        Group {
             Button("Make Request", action: makeRequest)
-            Button("Present Log", action: self.presentLog)
+            Button("Present Log", action: { isPresentingLog = true })
             Button("\(isLogging ? "Stop" : "Start") Logging", action: toggleLogging)
                 .foregroundColor(isLogging ? .red : .green)
         }
@@ -59,7 +59,7 @@ struct ContentView: View {
     }
     
     func makeRequest() {
-        guard let url = URL(string: "https://api.github.com/repos/hkellaway/Nog") else {
+        guard let url = URL(string: "https://api.github.com/zen") else {
             return
         }
         self.session.dataTask(with: URLRequest(url: url)).resume()
