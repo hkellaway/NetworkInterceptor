@@ -236,18 +236,21 @@ public final class NetworkLoggerViewContainer: ObservableObject, NetworkLogDispl
   public let sessionConfiguration: URLSessionConfiguration
   public let credential: URLCredential?
   public let authenticationMethod: String?
+  public let customActions: [(title: String, handler: () -> Void)]
 
   public init(sessionConfiguration: URLSessionConfiguration = .default,
               credential: URLCredential? = nil,
-              authenticationMethod: String? = NSURLAuthenticationMethodDefault) {
+              authenticationMethod: String? = NSURLAuthenticationMethodDefault,
+              customActions: [(title: String, handler: () -> Void)] = []) {
     self.sessionConfiguration = sessionConfiguration
     self.credential = credential
     self.authenticationMethod = authenticationMethod
+    self.customActions = customActions
     requests = []
   }
 
   public func toViewController() -> UIViewController {
-    let view = NetworkLoggerView().environmentObject(self)
+    let view = NetworkLoggerView(customActions: customActions).environmentObject(self)
     return UIHostingController(rootView: view)
   }
 
@@ -279,14 +282,17 @@ public struct NetworkLoggerView: View {
 
   @EnvironmentObject var container: NetworkLoggerViewContainer
   @State private var isShowingDebugMenu = false
+  let customActions: [(title: String, handler: () -> Void)]
 
-  public init() { }
+  public init(customActions: [(title: String, handler: () -> Void)] = []) {
+    self.customActions = customActions
+  }
 
   public var body: some View {
     NavigationView {
       VStack {
         Button(action: { self.isShowingDebugMenu = true }, label: {
-          Text("Debug Menu")
+          Text("Actions")
             .foregroundColor(.white)
             .padding(.vertical, 8)
             .frame(maxWidth: .infinity)
@@ -305,7 +311,7 @@ public struct NetworkLoggerView: View {
       .navigationBarHidden(true)
     }
     .actionSheet(isPresented: $isShowingDebugMenu) {
-      ActionSheet(title: Text("Debug"), message: nil, buttons: [
+      ActionSheet(title: Text("Debug"), message: nil, buttons: customActions.map { ActionSheet.Button.default(Text($0.0), action: $0.1) } + [
         .destructive(Text("Clear"), action: container.clear),
         .cancel()
       ])
