@@ -192,8 +192,10 @@ internal class NetworkLoggerUrlProtocol: URLProtocol {
         if let _ = URLProtocol.property(forKey: "NetworkLoggerUrlProtocol", in: request) {
             return false
         }
-        
-        NotificationCenter._nog.post(name: ._urlProtocolReceivedRequest, object: request)
+
+        DispatchQueue.main.async {
+          NotificationCenter._nog.post(name: ._urlProtocolReceivedRequest, object: request)
+        }
         return false
     }
     
