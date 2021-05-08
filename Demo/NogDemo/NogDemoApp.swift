@@ -31,11 +31,12 @@ import SwiftUI
 @main
 struct NogDemoApp: App {
 
-    let container = NetworkLoggerViewContainer(sessionConfiguration: .default)
+    let networkLoggerViewContainer = NetworkLoggerViewContainer(sessionConfiguration: .default)
     
     var body: some Scene {
         WindowGroup {
-            ContentView(container: container)
+          ContentView(container: networkLoggerViewContainer)
+            .environmentObject(networkLoggerViewContainer)
         }
     }
     

@@ -32,14 +32,17 @@ struct ContentView: View {
 
     @State var isLogging = false
     @State var isPresentingLog = false
-    let networkLogger: NetworkLogger
-    let session: URLSession
+
+    private let networkLogger: NetworkLogger
+    private let networkLoggerViewContainer: NetworkLoggerViewContainer
+    private let session: URLSession
 
     init(container: NetworkLoggerViewContainer) {
       let networkLogger = NetworkLogger()
-      networkLogger.attachView(container)
       self.networkLogger = networkLogger
+      self.networkLoggerViewContainer = container
       self.session = URLSession(configuration: container.sessionConfiguration)
+      networkLogger.attachView(container)
     }
 
     var body: some View {
@@ -50,10 +53,7 @@ struct ContentView: View {
                 .foregroundColor(isLogging ? .red : .green)
         }
         .onAppear(perform: toggleLogging)
-        .sheet(isPresented: $isPresentingLog) {
-          NetworkLoggerView()
-            .environmentObject(networkLogger.view as! NetworkLoggerViewContainer)
-        }
+        .sheet(isPresented: $isPresentingLog, content: networkLoggerViewContainer.toView)
     }
     
     func makeRequest() {

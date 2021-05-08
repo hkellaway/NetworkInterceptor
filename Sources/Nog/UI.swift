@@ -72,9 +72,12 @@ public final class NetworkLoggerViewContainer: ObservableObject, NetworkLogDispl
     requests = []
   }
 
+  public func toView() -> some View {
+    return NetworkLoggerView(customActions: customActions).environmentObject(self)
+  }
+
   public func toViewController() -> UIViewController {
-    let view = NetworkLoggerView(customActions: customActions).environmentObject(self)
-    return UIHostingController(rootView: view)
+    return UIHostingController(rootView: toView())
   }
 
   public func displayRequest(_ urlRequest: URLRequest) {
