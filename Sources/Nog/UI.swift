@@ -53,7 +53,7 @@ public class ConsoleNetworkLoggerView: NetworkLogDisplayable {
 
 // MARK: - SwiftUI
 
-public final class NetworkLoggerViewContainer: ObservableObject, NetworkLogDisplayable {
+open class NetworkLoggerViewContainer: ObservableObject, NetworkLogDisplayable {
 
   @Published public private(set) var requests: [(id: Int, request: URLRequest)] = []
   public let sessionConfiguration: URLSessionConfiguration
