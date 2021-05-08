@@ -72,16 +72,16 @@ open class NetworkLoggerViewContainer: ObservableObject, NetworkLogDisplayable {
     requests = []
   }
 
+  open func displayRequest(_ urlRequest: URLRequest) {
+    requests.insert((requests.count + 1, urlRequest), at: 0)
+  }
+
   public func toView() -> some View {
     return NetworkLoggerView(customActions: customActions).environmentObject(self)
   }
 
   public func toViewController() -> UIViewController {
     return UIHostingController(rootView: toView())
-  }
-
-  public func displayRequest(_ urlRequest: URLRequest) {
-    requests.insert((requests.count + 1, urlRequest), at: 0)
   }
 
   internal func cURLDescriptionForRequest(atIndex index: Int) -> String {
