@@ -28,23 +28,20 @@
 import Nog
 import SwiftUI
 
-extension NetworkLogger {
-
-  static var custom: NetworkLogger {
-    let networkLogger = NetworkLogger()
-    networkLogger.attachView(NetworkLoggerViewController())
-    return networkLogger
-  }
-
-}
-
 struct ContentView: View {
-    
-    let networkLogger: NetworkLogger = .custom
-    let session: URLSession = .init(configuration: .default)
+
     @State var isLogging = false
     @State var isPresentingLog = false
-    
+    let networkLogger: NetworkLogger
+    let session: URLSession
+
+    init(container: NetworkLoggerViewContainer) {
+      let networkLogger = NetworkLogger()
+      networkLogger.attachView(container)
+      self.networkLogger = networkLogger
+      self.session = URLSession(configuration: container.sessionConfiguration)
+    }
+
     var body: some View {
         Group {
             Button("Make Request", action: makeRequest)
@@ -54,7 +51,8 @@ struct ContentView: View {
         }
         .onAppear(perform: toggleLogging)
         .sheet(isPresented: $isPresentingLog) {
-          NetworkLoggerView(networkLogger: networkLogger)
+          NetworkLoggerView()
+            .environmentObject(networkLogger.view as! NetworkLoggerViewContainer)
         }
     }
     
@@ -78,6 +76,6 @@ struct ContentView: View {
 
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
-        ContentView()
+      ContentView(container: NetworkLoggerViewContainer())
     }
 }

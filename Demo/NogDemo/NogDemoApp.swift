@@ -25,14 +25,17 @@
 //
 //
 
+import Nog
 import SwiftUI
 
 @main
 struct NogDemoApp: App {
+
+    let container = NetworkLoggerViewContainer(sessionConfiguration: .default)
     
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            ContentView(container: container)
         }
     }
     

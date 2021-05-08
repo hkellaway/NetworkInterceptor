@@ -230,24 +230,117 @@ public class ConsoleNetworkLoggerView: NetworkLogDisplayable {
 
 // MARK: NetworkLoggerViewController
 
-public struct NetworkLoggerView: UIViewControllerRepresentable {
-    
-    public let networkLogger: NetworkLogger
-    
-    public init(networkLogger: NetworkLogger) {
-        self.networkLogger = networkLogger
+public final class NetworkLoggerViewContainer: ObservableObject, NetworkLogDisplayable {
+
+  @Published public private(set) var requests: [(id: Int, request: URLRequest)] = []
+  public let sessionConfiguration: URLSessionConfiguration
+  public let credential: URLCredential?
+  public let authenticationMethod: String?
+
+  public init(sessionConfiguration: URLSessionConfiguration = .default,
+              credential: URLCredential? = nil,
+              authenticationMethod: String? = NSURLAuthenticationMethodDefault) {
+    self.sessionConfiguration = sessionConfiguration
+    self.credential = credential
+    self.authenticationMethod = authenticationMethod
+    requests = []
+  }
+
+  public func toViewController() -> UIViewController {
+    let view = NetworkLoggerView().environmentObject(self)
+    return UIHostingController(rootView: view)
+  }
+
+  public func displayRequest(_ urlRequest: URLRequest) {
+    requests.insert((requests.count + 1, urlRequest), at: 0)
+  }
+
+  internal func cURLDescriptionForRequest(atIndex index: Int) -> String {
+    guard index >= 0 && index < requests.count else {
+      return "Invalid"
     }
-    
-    public func makeUIViewController(context: Context) -> NetworkLoggerViewController {
-        guard let instance = networkLogger.view as? NetworkLoggerViewController else {
-            networkLogger.console.debugPrint("To use NetworkLoggerView effectively, make sure NetworkLogger has a NetworkLoggerViewController as its view.")
-            return NetworkLoggerViewController()
+    return requests[index].1
+      .cURLDescription(sessionConfiguration: sessionConfiguration,
+                       credential: credential,
+                       authenticationMethod: authenticationMethod)
+  }
+
+  internal func requestDisplayNumber(forIndex index: Int) -> Int {
+    return requests.count - index
+  }
+
+  internal func clear() {
+    requests = []
+  }
+
+}
+
+public struct NetworkLoggerView: View {
+
+  @EnvironmentObject var container: NetworkLoggerViewContainer
+  @State private var isShowingDebugMenu = false
+
+  public init() { }
+
+  public var body: some View {
+    NavigationView {
+      VStack {
+        Button(action: { self.isShowingDebugMenu = true }, label: {
+          Text("Debug Menu")
+            .foregroundColor(.white)
+            .padding(.vertical, 8)
+            .frame(maxWidth: .infinity)
+        })
+        .background(Color.blue)
+        List(Array(container.requests.enumerated()), id: \.1.id) { (index, request) in
+          NavigationLink(destination:
+                            NetworkRequestDetailView(index: index).environmentObject(container)
+                            .navigationBarTitle("Request #\(container.requestDisplayNumber(forIndex: index))")
+          ) {
+            Text("#\(container.requestDisplayNumber(forIndex: index)) \(request.1.httpMethod ?? "") \(request.1.url?.absoluteString ?? "")")
+          }
         }
-        return instance
+      }
+      .navigationBarTitle("")
+      .navigationBarHidden(true)
     }
-    
-    public func updateUIViewController(_ uiViewController: NetworkLoggerViewController, context: Context) { }
-    
+    .actionSheet(isPresented: $isShowingDebugMenu) {
+      ActionSheet(title: Text("Debug"), message: nil, buttons: [
+        .destructive(Text("Clear"), action: container.clear),
+        .cancel()
+      ])
+    }
+  }
+
+}
+
+internal struct NetworkRequestDetailView: View {
+
+  @EnvironmentObject var container: NetworkLoggerViewContainer
+  let index: Int
+
+  var body: some View {
+    ScrollView {
+      VStack(alignment: .leading, spacing: 16) {
+        Button(action: copyCurlToClipboard) {
+          Text("Copy cURL")
+            .padding(8)
+            .background(Color.blue)
+            .foregroundColor(.white)
+            .cornerRadius(4)
+        }
+        Text(container.cURLDescriptionForRequest(atIndex: index))
+        Spacer()
+      }
+      .padding(.horizontal, 16)
+      .padding(.top, 16)
+    }
+  }
+
+  func copyCurlToClipboard() {
+    UIPasteboard.general.string = container.cURLDescriptionForRequest(atIndex: index)
+  }
+
 }
 
 open class NetworkLoggerViewController: UIViewController, NetworkLogDisplayable {
