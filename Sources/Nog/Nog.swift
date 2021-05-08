@@ -320,6 +320,7 @@ open class NetworkLoggerViewController: UIViewController, NetworkLogDisplayable 
     
   public func clear() {
     requestHistory = []
+    lastIndexSelected = -1
     DispatchQueue.main.async { [weak self] in
       self?.tableView.reloadData()
     }
