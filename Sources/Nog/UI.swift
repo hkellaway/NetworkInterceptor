@@ -53,9 +53,10 @@ public class ConsoleNetworkLoggerView: NetworkLogDisplayable {
 
 // MARK: - SwiftUI
 
-open class NetworkLoggerViewContainer: ObservableObject, NetworkLogDisplayable {
+public class NetworkLoggerViewContainer: ObservableObject, NetworkLogDisplayable {
 
   @Published public private(set) var requests: [(id: Int, request: URLRequest)] = []
+  public var afterDisplayRequest: ((URLRequest) -> Void)?
   public let sessionConfiguration: URLSessionConfiguration
   public let credential: URLCredential?
   public let authenticationMethod: String?
@@ -72,8 +73,9 @@ open class NetworkLoggerViewContainer: ObservableObject, NetworkLogDisplayable {
     requests = []
   }
 
-  open func displayRequest(_ urlRequest: URLRequest) {
+  public func displayRequest(_ urlRequest: URLRequest) {
     requests.insert((requests.count + 1, urlRequest), at: 0)
+    afterDisplayRequest?(urlRequest)
   }
 
   public func toView() -> some View {
