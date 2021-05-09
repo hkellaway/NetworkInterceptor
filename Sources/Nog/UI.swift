@@ -82,10 +82,6 @@ public class NetworkLoggerViewContainer: ObservableObject, NetworkLogDisplayable
     return NetworkLoggerView(customActions: customActions).environmentObject(self)
   }
 
-  public func toViewController() -> UIViewController {
-    return UIHostingController(rootView: toView())
-  }
-
   internal func cURLDescriptionForRequest(atIndex index: Int) -> String {
     guard index >= 0 && index < requests.count else {
       return "Invalid"
