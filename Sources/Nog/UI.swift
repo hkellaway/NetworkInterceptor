@@ -56,7 +56,7 @@ public class ConsoleNetworkLoggerView: NetworkLogDisplayable {
 public class NetworkLoggerViewContainer: ObservableObject, NetworkLogDisplayable {
 
   @Published public private(set) var requests: [(id: Int, request: URLRequest)] = []
-  public var afterDisplayRequest: ((URLRequest) -> Void)?
+  public var afterDisplayRequest: ((URLRequest, String) -> Void)?
   public let sessionConfiguration: URLSessionConfiguration
   public let credential: URLCredential?
   public let authenticationMethod: String?
@@ -75,7 +75,7 @@ public class NetworkLoggerViewContainer: ObservableObject, NetworkLogDisplayable
 
   public func displayRequest(_ urlRequest: URLRequest) {
     requests.insert((requests.count + 1, urlRequest), at: 0)
-    afterDisplayRequest?(urlRequest)
+    afterDisplayRequest?(urlRequest, cURLDescriptionForRequest(urlRequest))
   }
 
   public func toView() -> some View {
@@ -86,10 +86,13 @@ public class NetworkLoggerViewContainer: ObservableObject, NetworkLogDisplayable
     guard index >= 0 && index < requests.count else {
       return "Invalid"
     }
-    return requests[index].1
-      .cURLDescription(sessionConfiguration: sessionConfiguration,
-                       credential: credential,
-                       authenticationMethod: authenticationMethod)
+    return cURLDescriptionForRequest(requests[index].1)
+  }
+
+  internal func cURLDescriptionForRequest(_ urlRequest: URLRequest) -> String {
+    return urlRequest.cURLDescription(sessionConfiguration: sessionConfiguration,
+                                      credential: credential,
+                                      authenticationMethod: authenticationMethod)
   }
 
   internal func requestDisplayNumber(forIndex index: Int) -> Int {
