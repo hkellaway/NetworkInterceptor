@@ -61,7 +61,7 @@ open class NetworkLogger {
     // MARK: Private properties
 
     private let adapter: NetworkLoggerUrlProtocolAdapter
-    internal let console: NogConsole
+    private let console: NogConsole
     
     // MARK: Init/Deinit
 
@@ -80,7 +80,7 @@ open class NetworkLogger {
         self.adapter = adapter
         self.console = console
 
-        self.adapter.logRequest = self.logRequest
+        self.adapter.logRequest = { self.logRequest($0) }
         self.console.turn(on: verbose)
         self.attachView(ConsoleNetworkLoggerView(console: console))
     }
@@ -150,9 +150,9 @@ open class NetworkLogger {
 // MARK: NetworkLoggerUrlProtocolAdapter
 
 /// Adapts output from UrlProtocol interception for use by NetworkLogger.
-open class NetworkLoggerUrlProtocolAdapter {
+public class NetworkLoggerUrlProtocolAdapter {
 
-  var logRequest: ((URLRequest) -> Bool)?
+  internal var logRequest: ((URLRequest) -> Void)?
 
   public init() {
     NotificationCenter._nog.addObserver(self,
@@ -166,7 +166,7 @@ open class NetworkLoggerUrlProtocolAdapter {
   }
 
   public func requestReceived(_ urlRequest: URLRequest) {
-    let _ = logRequest?(urlRequest)
+    logRequest?(urlRequest)
   }
 
   @objc
@@ -183,7 +183,7 @@ open class NetworkLoggerUrlProtocolAdapter {
 
 internal class NetworkLoggerUrlProtocol: URLProtocol {
     
-    open override class func canInit(with request: URLRequest) -> Bool {
+    override class func canInit(with request: URLRequest) -> Bool {
         if let httpHeaders = request.allHTTPHeaderFields, httpHeaders.isEmpty {
             return false
         }
@@ -198,7 +198,7 @@ internal class NetworkLoggerUrlProtocol: URLProtocol {
         return false
     }
     
-    open override class func canonicalRequest(for request: URLRequest) -> URLRequest {
+    override class func canonicalRequest(for request: URLRequest) -> URLRequest {
         let mutableRequest: NSMutableURLRequest = (request as NSURLRequest).mutableCopy() as! NSMutableURLRequest
         URLProtocol.setProperty("YES", forKey: "NetworkLoggerUrlProtocol", in: mutableRequest)
         return mutableRequest.copy() as! URLRequest
