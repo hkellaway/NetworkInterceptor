@@ -105,17 +105,17 @@ public class NetworkLoggerViewContainer: ObservableObject, NetworkLogDisplayable
 
 }
 
-public struct NetworkLoggerView: View {
+internal struct NetworkLoggerView: View {
 
   @EnvironmentObject var container: NetworkLoggerViewContainer
   @State private var isShowingDebugMenu = false
   let customActions: [(title: String, handler: () -> Void)]
 
-  public init(customActions: [(title: String, handler: () -> Void)] = []) {
+  internal init(customActions: [(title: String, handler: () -> Void)] = []) {
     self.customActions = customActions
   }
 
-  public var body: some View {
+  var body: some View {
     NavigationView {
       VStack {
         Button(action: { self.isShowingDebugMenu = true }, label: {
@@ -170,7 +170,7 @@ internal struct NetworkRequestDetailView: View {
     }
   }
 
-  func copyCurlToClipboard() {
+  private func copyCurlToClipboard() {
     UIPasteboard.general.string = container.cURLDescriptionForRequest(atIndex: index)
   }
 

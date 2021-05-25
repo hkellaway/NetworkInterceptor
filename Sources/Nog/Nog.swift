@@ -27,116 +27,7 @@
 
 import Foundation
 
-// MARK: - NetworkLogger
-
-/// Manages whether network logging is on and reactions to network requests.
-open class NetworkLogger {
-    
-    // MARK: Public properties
-
-    /// Filters called when a request is logged, giving client a chance to determine whether
-    /// request should be logged or not.
-    public let requestFilters: [RequestFilter]
-
-    /// View where logs are displayed.
-    public private(set) var view: NetworkLogDisplayable!
-    
-    /// Whether network logging is currently on.
-    public private(set) var isLogging = false
-
-    /// Whether verbose console logging is on.
-    public var verbose: Bool = true {
-      didSet {
-        console.turn(on: verbose)
-      }
-    }
-
-    /// Number of requests made since start.
-    public private(set) var requestCount = 0 {
-      didSet {
-        (view as? ConsoleNetworkLoggerView)?.requestCount = requestCount
-      }
-    }
-
-    // MARK: Private properties
-
-    private let adapter: NetworkLoggerUrlProtocolAdapter
-    private let console: NogConsole
-    
-    // MARK: Init/Deinit
-
-    public convenience init(filter customRequestFilter: RequestFilter? = nil) {
-        self.init(requestFilters: [
-          httpOnlyRequestFilter,
-          (customRequestFilter ?? noRequestFilter),
-        ])
-    }
-    
-    public init(requestFilters: [RequestFilter],
-                adapter: NetworkLoggerUrlProtocolAdapter = NetworkLoggerUrlProtocolAdapter(),
-                console: NogConsole = NogConsole(),
-                verbose: Bool = true) {
-        self.requestFilters = requestFilters
-        self.adapter = adapter
-        self.console = console
-
-        self.adapter.logRequest = { self.logRequest($0) }
-        self.console.turn(on: verbose)
-        self.attachView(ConsoleNetworkLoggerView(console: console))
-    }
-
-    // MARK: Public instance functions
-    
-    /// Starts recording of network requests.
-    public func start() {
-        guard !isLogging else {
-            console.debugPrint("Attempt to `start` while already started. Returning.")
-            return
-        }
-        
-        URLProtocol.registerClass(NetworkLoggerUrlProtocol.self)
-        URLSessionConfiguration.swizzleProtocolClasses()
-        isLogging = true
-    }
-    
-    /// Stops recording of networking requests.
-    public func stop() {
-        guard isLogging else {
-            console.debugPrint("Attempt to `stop` while already stopped. Returning.")
-            return
-        }
-        
-        URLProtocol.unregisterClass(NetworkLoggerUrlProtocol.self)
-        URLSessionConfiguration.swizzleProtocolClasses()
-        isLogging = false
-    }
-    
-    public func toggle() {
-        if isLogging {
-            stop()
-        } else {
-            start()
-        }
-    }
-
-    @discardableResult
-    open func logRequest(_ urlRequest: URLRequest) -> Bool {
-      guard isLogging, (requestFilters.reduce(true) { $0 && $1(urlRequest) }) else {
-        return false
-      }
-
-      requestCount = requestCount + 1
-      view.displayRequest(urlRequest)
-      return true
-    }
-
-    open func attachView(_ view: NetworkLogDisplayable) {
-      self.view = view
-    }
-
-}
-
-// MARK: NetworkLoggerUrlProtocolAdapter
+// MARK: - NetworkLoggerUrlProtocolAdapter
 
 /// Adapts output from UrlProtocol interception for use by NetworkLogger.
 public class NetworkLoggerUrlProtocolAdapter {
@@ -168,7 +59,7 @@ public class NetworkLoggerUrlProtocolAdapter {
 
 }
 
-// MARK: NetworkLoggerUrlProtocol
+// MARK: - NetworkLoggerUrlProtocol
 
 internal class NetworkLoggerUrlProtocol: URLProtocol {
     
@@ -195,55 +86,13 @@ internal class NetworkLoggerUrlProtocol: URLProtocol {
     
 }
 
-
-// MARK: NogConsole
-
-/// Prints to console including [Nog] identifier.
-open class NogConsole {
-
-  private(set) var isOn: Bool
-
-  public init() {
-    self.isOn = false
-  }
-
-  public func turn(on isOn: Bool) {
-    self.isOn = isOn
-  }
-
-  @discardableResult
-  public func debugPrint(_ message: String) -> String {
-    guard isOn else {
-      return ""
-    }
-    let message = "[Nog] \(message)"
-    print(message)
-    return message
-  }
-
-}
-
-// MARK: - Request Filter
-
-public typealias RequestFilter = (URLRequest) -> Bool
-
-/// Request filter that allows all requests through.
-public let noRequestFilter: RequestFilter = { _ in
-  return true
-}
-
-/// Request filter that only allows https or http requests through.
-public let httpOnlyRequestFilter: RequestFilter = {
-  $0.url?.scheme.flatMap { ["https", "http"].contains($0) } ?? false
-}
-
 // MARK: - Extensions
 
 // MARK: URLSessionConfiguration
 
 extension URLSessionConfiguration {
     
-    internal static func swizzleProtocolClasses() {
+    internal static func _swizzleProtocolClasses() {
         let instance = URLSessionConfiguration.default
         let sessionConfigurationClass: AnyClass = object_getClass(instance)!
         let method1: Method = class_getInstanceMethod(sessionConfigurationClass, #selector(getter: sessionConfigurationClass.protocolClasses))!
