@@ -95,7 +95,7 @@ open class NetworkLogger {
         }
         
         URLProtocol.registerClass(NetworkLoggerUrlProtocol.self)
-        swizzleProtocolClasses()
+        URLSessionConfiguration.swizzleProtocolClasses()
         isLogging = true
     }
     
@@ -107,7 +107,7 @@ open class NetworkLogger {
         }
         
         URLProtocol.unregisterClass(NetworkLoggerUrlProtocol.self)
-        swizzleProtocolClasses()
+        URLSessionConfiguration.swizzleProtocolClasses()
         isLogging = false
     }
     
@@ -132,17 +132,6 @@ open class NetworkLogger {
 
     open func attachView(_ view: NetworkLogDisplayable) {
       self.view = view
-    }
-    
-    // MARK: Private instance functions
-    
-    private func swizzleProtocolClasses() {
-        let instance = URLSessionConfiguration.default
-        let sessionConfigurationClass: AnyClass = object_getClass(instance)!
-        let method1: Method = class_getInstanceMethod(sessionConfigurationClass, #selector(getter: sessionConfigurationClass.protocolClasses))!
-        let method2: Method = class_getInstanceMethod(URLSessionConfiguration.self, #selector(URLSessionConfiguration._injectedProtocolClasses))!
-
-        method_exchangeImplementations(method1, method2)
     }
 
 }
@@ -253,6 +242,15 @@ public let httpOnlyRequestFilter: RequestFilter = {
 // MARK: URLSessionConfiguration
 
 extension URLSessionConfiguration {
+    
+    internal static func swizzleProtocolClasses() {
+        let instance = URLSessionConfiguration.default
+        let sessionConfigurationClass: AnyClass = object_getClass(instance)!
+        let method1: Method = class_getInstanceMethod(sessionConfigurationClass, #selector(getter: sessionConfigurationClass.protocolClasses))!
+        let method2: Method = class_getInstanceMethod(URLSessionConfiguration.self, #selector(URLSessionConfiguration._injectedProtocolClasses))!
+
+        method_exchangeImplementations(method1, method2)
+    }
     
     /// Implementation of `URLSessionConfiguration.protocolClasses` used when
     /// network logging is on; ensures `NetworkLoggerUrlProtocol` is at
