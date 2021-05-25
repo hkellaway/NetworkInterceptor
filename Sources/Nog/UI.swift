@@ -138,7 +138,7 @@ internal struct NetworkLoggerView: View {
       .navigationBarHidden(true)
     }
     .actionSheet(isPresented: $isShowingDebugMenu) {
-      ActionSheet(title: Text("Debug"), message: nil, buttons: customActions.map { ActionSheet.Button.default(Text($0.0), action: $0.1) } + [
+      ActionSheet(title: Text("Actions"), message: nil, buttons: customActions.map { ActionSheet.Button.default(Text($0.0), action: $0.1) } + [
         .destructive(Text("Clear"), action: container.clear),
         .cancel()
       ])
@@ -217,7 +217,7 @@ open class NetworkLoggerViewController: UIViewController, NetworkLogDisplayable 
       stackView.leadingAnchor.constraint(equalTo: view.leadingAnchor)
     ])
 
-    actionMenuButton.setTitle("Debug", for: .normal)
+    actionMenuButton.setTitle("Actions", for: .normal)
     actionMenuButton.backgroundColor = .systemTeal
     stackView.insertArrangedSubview(actionMenuButton, at: 0)
     actionMenuButton.addTarget(self, action: #selector(presentDebugActions), for: .touchUpInside)
@@ -256,7 +256,7 @@ open class NetworkLoggerViewController: UIViewController, NetworkLogDisplayable 
 
   @objc
   private func presentDebugActions() {
-    let actionSheet = UIAlertController(title: "Debug", message: nil, preferredStyle: .actionSheet)
+    let actionSheet = UIAlertController(title: "Action", message: nil, preferredStyle: .actionSheet)
     let clearAction: UIAlertAction = .init(title: "Clear", style: .destructive, handler: { [weak self] _ in
       self?.clear()
     })
