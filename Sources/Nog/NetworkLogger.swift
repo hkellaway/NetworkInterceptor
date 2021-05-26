@@ -39,10 +39,19 @@ open class NetworkLogger {
     public let requestFilters: [RequestFilter]
 
     /// View where logs are displayed.
-    public private(set) var view: NetworkLogDisplayable!
+    public private(set) var view: NetworkLogDisplayable! {
+      didSet {
+        (view as? NetworkLoggerViewContainer)?.toggleLogging = self.toggle
+        (view as? NetworkLoggerViewContainer)?.isLogging = isLogging
+      }
+    }
     
     /// Whether network logging is currently on.
-    public private(set) var isLogging = false
+    public private(set) var isLogging = false {
+      didSet {
+        (view as? NetworkLoggerViewContainer)?.isLogging = isLogging
+      }
+    }
 
     /// Whether verbose console logging is on.
     public var verbose: Bool = true {

@@ -56,6 +56,8 @@ public class ConsoleNetworkLoggerView: NetworkLogDisplayable {
 public class NetworkLoggerViewContainer: ObservableObject, NetworkLogDisplayable {
 
   @Published public private(set) var requests: [(id: Int, request: URLRequest)] = []
+  @Published  public internal(set) var isLogging: Bool = false
+  public internal(set) var toggleLogging: (() -> Void) = { }
   public var afterDisplayRequest: ((URLRequest, String) -> Void)?
   public let sessionConfiguration: URLSessionConfiguration
   public let credential: URLCredential?
@@ -111,10 +113,6 @@ internal struct NetworkLoggerView: View {
   @State private var isShowingDebugMenu = false
   let customActions: [(title: String, handler: () -> Void)]
 
-  internal init(customActions: [(title: String, handler: () -> Void)] = []) {
-    self.customActions = customActions
-  }
-
   var body: some View {
     NavigationView {
       VStack {
@@ -139,6 +137,7 @@ internal struct NetworkLoggerView: View {
     }
     .actionSheet(isPresented: $isShowingDebugMenu) {
       ActionSheet(title: Text("Actions"), message: nil, buttons: customActions.map { ActionSheet.Button.default(Text($0.0), action: $0.1) } + [
+        .default(Text("Turn Logging \(container.isLogging ? "Off" : "On")"), action: container.toggleLogging),
         .destructive(Text("Clear"), action: container.clear),
         .cancel()
       ])

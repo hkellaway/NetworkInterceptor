@@ -49,10 +49,8 @@ struct ContentView: View {
         Group {
             Button("Make Request", action: makeRequest)
             Button("Present Log", action: { isPresentingLog = true })
-            Button("\(isLogging ? "Stop" : "Start") Logging", action: toggleLogging)
-                .foregroundColor(isLogging ? .red : .green)
         }
-        .onAppear(perform: toggleLogging)
+        .onAppear(perform: networkLogger.toggle)
         .sheet(isPresented: $isPresentingLog, content: networkLoggerViewContainer.toView)
     }
     
@@ -61,11 +59,6 @@ struct ContentView: View {
             return
         }
         self.session.dataTask(with: URLRequest(url: url)).resume()
-    }
-    
-    func toggleLogging() {
-        networkLogger.toggle()
-        self.isLogging = networkLogger.isLogging
     }
 
     func presentLog() {
