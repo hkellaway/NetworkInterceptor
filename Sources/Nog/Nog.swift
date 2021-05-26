@@ -30,7 +30,7 @@ import Foundation
 // MARK: - NetworkLoggerUrlProtocolAdapter
 
 /// Adapts output from UrlProtocol interception for use by NetworkLogger.
-public class NetworkLoggerUrlProtocolAdapter {
+open class NetworkLoggerUrlProtocolAdapter {
 
   internal var logRequest: ((URLRequest) -> Void)?
 
