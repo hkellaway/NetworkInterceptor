@@ -14,7 +14,7 @@
 		2F88C25C2620C629007968C3 /* cURL.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F88C25B2620C629007968C3 /* cURL.swift */; };
 		DC86F75726101DC100696363 /* Nog.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC86F75626101DC100696363 /* Nog.swift */; };
 		DC86F76226101E0300696363 /* XCTestManifests.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC86F76026101E0300696363 /* XCTestManifests.swift */; };
-		DC86F76326101E0300696363 /* NogTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC86F76126101E0300696363 /* NogTests.swift */; };
+		DC86F76326101E0300696363 /* NetworkLoggerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC86F76126101E0300696363 /* NetworkLoggerTests.swift */; };
 		DC8904ED26100269008D2B5F /* Nog.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DC8904E326100269008D2B5F /* Nog.framework */; };
 		DCC70684265C9AAD005712EE /* NetworkLogger.swift in Sources */ = {isa = PBXBuildFile; fileRef = DCC70683265C9AAD005712EE /* NetworkLogger.swift */; };
 /* End PBXBuildFile section */
@@ -38,7 +38,7 @@
 		DC86F69826100F3200696363 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = Tests/Info.plist; sourceTree = "<group>"; };
 		DC86F75626101DC100696363 /* Nog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = Nog.swift; path = Sources/Nog/Nog.swift; sourceTree = "<group>"; };
 		DC86F76026101E0300696363 /* XCTestManifests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = XCTestManifests.swift; path = Tests/NogTests/XCTestManifests.swift; sourceTree = "<group>"; };
-		DC86F76126101E0300696363 /* NogTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = NogTests.swift; path = Tests/NogTests/NogTests.swift; sourceTree = "<group>"; };
+		DC86F76126101E0300696363 /* NetworkLoggerTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = NetworkLoggerTests.swift; path = Tests/NogTests/NetworkLoggerTests.swift; sourceTree = "<group>"; };
 		DC8904E326100269008D2B5F /* Nog.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Nog.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		DC8904EC26100269008D2B5F /* NogTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = NogTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		DCC70683265C9AAD005712EE /* NetworkLogger.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = NetworkLogger.swift; path = Sources/Nog/NetworkLogger.swift; sourceTree = "<group>"; };
@@ -78,7 +78,7 @@
 			isa = PBXGroup;
 			children = (
 				2F2E46DF2647136200FFE9C3 /* Mocks */,
-				DC86F76126101E0300696363 /* NogTests.swift */,
+				DC86F76126101E0300696363 /* NetworkLoggerTests.swift */,
 				DC86F76026101E0300696363 /* XCTestManifests.swift */,
 				DC86F69826100F3200696363 /* Info.plist */,
 			);
@@ -236,7 +236,7 @@
 			files = (
 				2F2E46E82647136E00FFE9C3 /* MockConsole.swift in Sources */,
 				2F2E46E62647136700FFE9C3 /* MockURLRequest.swift in Sources */,
-				DC86F76326101E0300696363 /* NogTests.swift in Sources */,
+				DC86F76326101E0300696363 /* NetworkLoggerTests.swift in Sources */,
 				DC86F76226101E0300696363 /* XCTestManifests.swift in Sources */,
 				2F2E46E72647136B00FFE9C3 /* MockAdapter.swift in Sources */,
 			);

@@ -8,7 +8,7 @@
 import XCTest
 @testable import Nog
 
-class NogTests: XCTestCase {
+class NetworkLoggerTests: XCTestCase {
 
   var sut: NetworkLogger!
   var mockAdapter: MockAdapter!
