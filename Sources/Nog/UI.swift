@@ -54,7 +54,7 @@ public class ConsoleNetworkLoggerView: NetworkLogDisplayable {
 
 public class NetworkLoggerViewContainer: ObservableObject, NetworkLogDisplayable {
 
-  @Published public private(set) var requests: [(id: Int, request: URLRequest)] = []
+  @Published public private(set) var requests: [NogURLRequest] = []
   @Published  public internal(set) var isLogging: Bool = false
   public internal(set) var toggleLogging: (() -> Void) = { }
   public var afterDisplayRequest: ((URLRequest, String) -> Void)?
@@ -75,29 +75,19 @@ public class NetworkLoggerViewContainer: ObservableObject, NetworkLogDisplayable
   }
 
   public func displayRequest(_ urlRequest: URLRequest) {
-    requests.insert((requests.count + 1, urlRequest), at: 0)
-    afterDisplayRequest?(urlRequest, cURLDescriptionForRequest(urlRequest))
+    let request = NogURLRequest(id: requests.count + 1, value: urlRequest)
+    requests.insert(request, at: 0)
+    afterDisplayRequest?(request.value, cURLDescriptionForRequest(request))
   }
 
   public func toView() -> some View {
     return NetworkLoggerView(customActions: customActions).environmentObject(self)
   }
 
-  internal func cURLDescriptionForRequest(atIndex index: Int) -> String {
-    guard index >= 0 && index < requests.count else {
-      return "Invalid"
-    }
-    return cURLDescriptionForRequest(requests[index].1)
-  }
-
-  internal func cURLDescriptionForRequest(_ urlRequest: URLRequest) -> String {
-    return urlRequest.cURLDescription(sessionConfiguration: sessionConfiguration,
-                                      credential: credential,
-                                      authenticationMethod: authenticationMethod)
-  }
-
-  internal func requestDisplayNumber(forIndex index: Int) -> Int {
-    return requests.count - index
+  internal func cURLDescriptionForRequest(_ request: NogURLRequest) -> String {
+    return request.value.cURLDescription(sessionConfiguration: sessionConfiguration,
+                                         credential: credential,
+                                         authenticationMethod: authenticationMethod)
   }
 
   internal func clear() {
@@ -122,12 +112,12 @@ internal struct NetworkLoggerView: View {
             .frame(maxWidth: .infinity)
         })
         .background(Color.blue)
-        List(Array(container.requests.enumerated()), id: \.1.id) { (index, request) in
+        List(container.requests) { request in
           NavigationLink(destination:
-                            NetworkRequestDetailView(index: index).environmentObject(container)
-                            .navigationBarTitle("Request #\(container.requestDisplayNumber(forIndex: index))")
+                            NetworkRequestDetailView(request: request).environmentObject(container)
+                            .navigationBarTitle("Request #\(request.id)")
           ) {
-            Text("#\(container.requestDisplayNumber(forIndex: index)) \(request.1.httpMethod ?? "") \(request.1.url?.absoluteString ?? "")")
+            Text("#\(request.id) \(request.value.httpMethod ?? "") \(request.value.url?.absoluteString ?? "")")
           }
         }
       }
@@ -148,7 +138,7 @@ internal struct NetworkLoggerView: View {
 internal struct NetworkRequestDetailView: View {
 
   @EnvironmentObject var container: NetworkLoggerViewContainer
-  let index: Int
+  let request: NogURLRequest
 
   var body: some View {
     ScrollView {
@@ -160,7 +150,7 @@ internal struct NetworkRequestDetailView: View {
             .foregroundColor(.white)
             .cornerRadius(4)
         }
-        Text(container.cURLDescriptionForRequest(atIndex: index))
+        Text(container.cURLDescriptionForRequest(request))
         Spacer()
       }
       .padding(.horizontal, 16)
@@ -169,7 +159,7 @@ internal struct NetworkRequestDetailView: View {
   }
 
   private func copyCurlToClipboard() {
-    UIPasteboard.general.string = container.cURLDescriptionForRequest(atIndex: index)
+    UIPasteboard.general.string = container.cURLDescriptionForRequest(request)
   }
 
 }
