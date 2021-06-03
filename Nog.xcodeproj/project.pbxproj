@@ -12,6 +12,7 @@
 		2F2E46E82647136E00FFE9C3 /* MockConsole.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F2E46E22647136200FFE9C3 /* MockConsole.swift */; };
 		2F2E46ED2647161700FFE9C3 /* UI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F2E46EC2647161700FFE9C3 /* UI.swift */; };
 		2F88C25C2620C629007968C3 /* cURL.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F88C25B2620C629007968C3 /* cURL.swift */; };
+		2F8FA494266887A50059AC8B /* Internal.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F8FA493266887A50059AC8B /* Internal.swift */; };
 		DC86F75726101DC100696363 /* Nog.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC86F75626101DC100696363 /* Nog.swift */; };
 		DC86F76226101E0300696363 /* XCTestManifests.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC86F76026101E0300696363 /* XCTestManifests.swift */; };
 		DC86F76326101E0300696363 /* NetworkLoggerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC86F76126101E0300696363 /* NetworkLoggerTests.swift */; };
@@ -35,6 +36,7 @@
 		2F2E46E22647136200FFE9C3 /* MockConsole.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MockConsole.swift; sourceTree = "<group>"; };
 		2F2E46EC2647161700FFE9C3 /* UI.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = UI.swift; path = Sources/Nog/UI.swift; sourceTree = "<group>"; };
 		2F88C25B2620C629007968C3 /* cURL.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = cURL.swift; path = Sources/Nog/cURL.swift; sourceTree = "<group>"; };
+		2F8FA493266887A50059AC8B /* Internal.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Internal.swift; path = Sources/Nog/Internal.swift; sourceTree = "<group>"; };
 		DC86F69826100F3200696363 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = Tests/Info.plist; sourceTree = "<group>"; };
 		DC86F75626101DC100696363 /* Nog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = Nog.swift; path = Sources/Nog/Nog.swift; sourceTree = "<group>"; };
 		DC86F76026101E0300696363 /* XCTestManifests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = XCTestManifests.swift; path = Tests/NogTests/XCTestManifests.swift; sourceTree = "<group>"; };
@@ -92,6 +94,7 @@
 				DCC70683265C9AAD005712EE /* NetworkLogger.swift */,
 				2F88C25B2620C629007968C3 /* cURL.swift */,
 				2F2E46EC2647161700FFE9C3 /* UI.swift */,
+				2F8FA493266887A50059AC8B /* Internal.swift */,
 			);
 			name = Sources;
 			sourceTree = "<group>";
@@ -226,6 +229,7 @@
 				DCC70684265C9AAD005712EE /* NetworkLogger.swift in Sources */,
 				DC86F75726101DC100696363 /* Nog.swift in Sources */,
 				2F88C25C2620C629007968C3 /* cURL.swift in Sources */,
+				2F8FA494266887A50059AC8B /* Internal.swift in Sources */,
 				2F2E46ED2647161700FFE9C3 /* UI.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
