@@ -105,15 +105,15 @@ class NetworkLoggerTests: XCTestCase {
   // MARK: - NogConsole
 
   func test_console_whenOn_prints() {
-    let sut = NogConsole()
+    let sut = ConsoleLogger()
     sut.turn(on: true)
-    XCTAssertEqual(sut.debugPrint("testing 1 2 3"), "[Nog] testing 1 2 3")
+    XCTAssertEqual(sut.log("testing 1 2 3"), "[Nog] testing 1 2 3")
   }
 
   func test_console_whenOff_doesNotPrint() {
-    let sut = NogConsole()
+    let sut = ConsoleLogger()
     sut.turn(on: false)
-    XCTAssertTrue(sut.debugPrint("testing 1 2 3").isEmpty)
+    XCTAssertTrue(sut.log("testing 1 2 3").isEmpty)
   }
 
   // MARK: - RequestFilter

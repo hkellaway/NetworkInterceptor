@@ -28,13 +28,13 @@
 import Foundation
 @testable import Nog
 
-class MockConsole: NogConsole {
+class MockConsole: ConsoleLogger {
 
   var lastMessage = ""
 
-  override func debugPrint(_ message: String) -> String {
+  override func log(_ message: String) -> String {
     self.lastMessage = message
-    return super.debugPrint(message)
+    return super.log(message)
   }
 
 }

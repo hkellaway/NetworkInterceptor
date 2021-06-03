@@ -70,7 +70,7 @@ open class NetworkLogger {
     // MARK: Private properties
 
     private let adapter: NetworkLoggerUrlProtocolAdapter
-    private let console: NogConsole
+    private let console: ConsoleLogger
     
     // MARK: Init/Deinit
 
@@ -83,7 +83,7 @@ open class NetworkLogger {
     
     public init(requestFilters: [RequestFilter],
                 adapter: NetworkLoggerUrlProtocolAdapter = NetworkLoggerUrlProtocolAdapter(),
-                console: NogConsole = NogConsole(),
+                console: ConsoleLogger = ConsoleLogger(),
                 verbose: Bool = true) {
         self.requestFilters = requestFilters
         self.adapter = adapter
@@ -99,7 +99,7 @@ open class NetworkLogger {
     /// Starts recording of network requests.
     public func start() {
         guard !isLogging else {
-            console.debugPrint("Attempt to `start` while already started. Returning.")
+            console.log("Attempt to `start` while already started. Returning.")
             return
         }
         
@@ -111,7 +111,7 @@ open class NetworkLogger {
     /// Stops recording of networking requests.
     public func stop() {
         guard isLogging else {
-            console.debugPrint("Attempt to `stop` while already stopped. Returning.")
+            console.log("Attempt to `stop` while already stopped. Returning.")
             return
         }
         
@@ -145,29 +145,27 @@ open class NetworkLogger {
 
 }
 
-// MARK: - NogConsole
+// MARK: - ConsoleLogger
 
 /// Prints to console including [Nog] identifier.
-open class NogConsole {
+open class ConsoleLogger {
 
-  private(set) var isOn: Bool
+  private var isOn = false
 
-  public init() {
-    self.isOn = false
-  }
-
-  public func turn(on isOn: Bool) {
-    self.isOn = isOn
-  }
+  public init() { }
 
   @discardableResult
-  public func debugPrint(_ message: String) -> String {
+  public func log(_ message: String) -> String {
     guard isOn else {
       return ""
     }
-    let message = "[Nog] \(message)"
-    print(message)
-    return message
+    let fullMessage = "[Nog] \(message)"
+    print(fullMessage)
+    return fullMessage
+  }
+
+  internal func turn(on: Bool) {
+    self.isOn = on
   }
 
 }

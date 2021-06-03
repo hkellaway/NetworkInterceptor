@@ -37,15 +37,15 @@ public protocol NetworkLogDisplayable {
 /// View that displays requests to console. Deafult if no view provided.
 public class ConsoleNetworkLoggerView: NetworkLogDisplayable {
 
-  public let console: NogConsole
+  public let console: ConsoleLogger
   var requestCount: Int = 0
 
-  public init(console: NogConsole) {
+  public init(console: ConsoleLogger) {
     self.console = console
   }
 
   public func displayRequest(_ urlRequest: URLRequest) {
-    console.debugPrint("Request #\(requestCount): URL => \(urlRequest.description)")
+    console.log("Request #\(requestCount): URL => \(urlRequest.description)")
   }
 
 }
