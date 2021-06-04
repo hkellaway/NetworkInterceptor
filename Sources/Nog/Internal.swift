@@ -27,6 +27,27 @@
 
 import Foundation
 
+// MARK: - NetworkLoggingSwizzle
+
+internal protocol _NetworkLoggingSwizzle {
+  func commit()
+  func undo()
+}
+
+internal struct _InternalNetworkLoggingSwizzle: _NetworkLoggingSwizzle {
+
+  func commit() {
+    URLProtocol.registerClass(NetworkLoggerUrlProtocol.self)
+    URLSessionConfiguration._swizzleProtocolClasses()
+  }
+
+  func undo() {
+    URLProtocol.unregisterClass(NetworkLoggerUrlProtocol.self)
+    URLSessionConfiguration._swizzleProtocolClasses()
+  }
+
+}
+
 // MARK: - NetworkLoggerUrlProtocol
 
 internal class NetworkLoggerUrlProtocol: URLProtocol {

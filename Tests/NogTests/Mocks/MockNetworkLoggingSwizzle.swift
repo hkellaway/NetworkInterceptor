@@ -1,6 +1,6 @@
 //
 //
-//  Nog.swift
+//  MockNetworkLoggingSwizzle.swift
 //  Nog
 //
 // Copyright (c) 2021 Harlan Kellaway
@@ -26,35 +26,21 @@
 //
 
 import Foundation
+@testable import Nog
 
-// MARK: - NetworkLoggerUrlProtocolAdapter
+class MockNetworkLoggingSwizzle: _NetworkLoggingSwizzle {
 
-/// Adapts output from UrlProtocol interception for use by NetworkLogger.
-open class NetworkLoggerUrlProtocolAdapter {
+  var didCommit = false
+  var didUndo = false
 
-  internal var logRequest: ((URLRequest) -> Void)?
+  init() { }
 
-  public init() {
-    NotificationCenter._nog.addObserver(self,
-                                        selector: #selector(unwrapRequestFromNotification(_:)),
-                                        name: ._urlProtocolReceivedRequest,
-                                        object: nil)
+  func commit() {
+    didCommit = true
   }
 
-  deinit {
-    NotificationCenter._nog.removeObserver(self)
-  }
-
-  public func requestReceived(_ urlRequest: URLRequest) {
-    logRequest?(urlRequest)
-  }
-
-  @objc
-  private func unwrapRequestFromNotification(_ notification: Notification) {
-    guard let urlRequest = notification.object as? URLRequest else {
-      return
-    }
-    requestReceived(urlRequest)
+  func undo() {
+    didUndo = true
   }
 
 }

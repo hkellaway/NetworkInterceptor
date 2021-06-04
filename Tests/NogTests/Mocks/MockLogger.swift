@@ -1,6 +1,6 @@
 //
 //
-//  MockAdapter.swift
+//  MockLogger.swift
 //  Nog
 //
 // Copyright (c) 2021 Harlan Kellaway
@@ -28,10 +28,13 @@
 import Foundation
 @testable import Nog
 
-class MockAdapter: NetworkLoggerUrlProtocolAdapter {
+class MockLogger: ConsoleLogger {
 
-  func sendMockRequest() {
-    requestReceived(.httpsRequest)
+  var lastMessageLogged = ""
+
+  override func log(_ message: String) -> String {
+    lastMessageLogged = super.log(message)
+    return lastMessageLogged
   }
 
 }

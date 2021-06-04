@@ -27,139 +27,91 @@
 
 import SwiftUI
 
-// MARK: - NetworkLogDisplayable
-
-/// View to display requests.
-public protocol NetworkLogDisplayable {
-  func displayRequest(_ urlRequest: URLRequest)
-}
-
-/// View that displays requests to console. Deafult if no view provided.
-public class ConsoleNetworkLoggerView: NetworkLogDisplayable {
-
-  public let console: ConsoleLogger
-  var requestCount: Int = 0
-
-  public init(console: ConsoleLogger) {
-    self.console = console
-  }
-
-  public func displayRequest(_ urlRequest: URLRequest) {
-    console.log("Request #\(requestCount): URL => \(urlRequest.description)")
-  }
-
-}
-
-// MARK: - SwiftUI
-
-public class NetworkLoggerViewContainer: ObservableObject, NetworkLogDisplayable {
-
-  @Published public private(set) var requests: [NogURLRequest] = []
-  @Published  public internal(set) var isLogging: Bool = false
-  public internal(set) var toggleLogging: (() -> Void) = { }
-  public var afterDisplayRequest: ((URLRequest, String) -> Void)?
-  public let sessionConfiguration: URLSessionConfiguration
-  public let credential: URLCredential?
-  public let authenticationMethod: String?
-  public let customActions: [(title: String, handler: () -> Void)]
-
-  public init(sessionConfiguration: URLSessionConfiguration = .default,
-              credential: URLCredential? = nil,
-              authenticationMethod: String? = NSURLAuthenticationMethodDefault,
-              customActions: [(title: String, handler: () -> Void)] = []) {
-    self.sessionConfiguration = sessionConfiguration
-    self.credential = credential
-    self.authenticationMethod = authenticationMethod
-    self.customActions = customActions
-    requests = []
-  }
-
-  public func displayRequest(_ urlRequest: URLRequest) {
-    let request = NogURLRequest(id: requests.count + 1, value: urlRequest)
-    requests.insert(request, at: 0)
-    afterDisplayRequest?(request.value, cURLDescriptionForRequest(request))
-  }
-
-  public func toView() -> some View {
-    return NetworkLoggerView(customActions: customActions).environmentObject(self)
-  }
-
-  internal func cURLDescriptionForRequest(_ request: NogURLRequest) -> String {
-    return request.value.cURLDescription(sessionConfiguration: sessionConfiguration,
-                                         credential: credential,
-                                         authenticationMethod: authenticationMethod)
-  }
-
-  internal func clear() {
-    requests = []
-  }
-
-}
-
-internal struct NetworkLoggerView: View {
-
-  @EnvironmentObject var container: NetworkLoggerViewContainer
-  @State private var isShowingDebugMenu = false
-  let customActions: [(title: String, handler: () -> Void)]
-
-  var body: some View {
-    NavigationView {
-      VStack {
-        Button(action: { self.isShowingDebugMenu = true }, label: {
-          Text("Actions")
-            .foregroundColor(.white)
-            .padding(.vertical, 8)
-            .frame(maxWidth: .infinity)
-        })
-        .background(Color.blue)
-        List(container.requests) { request in
-          NavigationLink(destination:
-                            NetworkRequestDetailView(request: request).environmentObject(container)
-                            .navigationBarTitle("Request #\(request.id)")
-          ) {
-            Text("#\(request.id) \(request.value.httpMethod ?? "") \(request.value.url?.absoluteString ?? "")")
-          }
+public struct NetworkLoggerView: View {
+    
+    @EnvironmentObject var networkLogger: NetworkLogger
+    @State private var isShowingDebugMenu = false
+    
+    public let sessionConfiguration: URLSessionConfiguration
+    public let credential: URLCredential?
+    public let authenticationMethod: String?
+    
+    private let customActions: [(title: String, handler: () -> Void)]
+    
+    public init(sessionConfiguration: URLSessionConfiguration = .default,
+                credential: URLCredential? = nil,
+                authenticationMethod: String? = NSURLAuthenticationMethodDefault,
+                customActions: [(title: String, handler: () -> Void)] = []) {
+        self.sessionConfiguration = sessionConfiguration
+        self.credential = credential
+        self.authenticationMethod = authenticationMethod
+        self.customActions = customActions
+    }
+    
+    public var body: some View {
+        NavigationView {
+            VStack {
+                Button(action: { self.isShowingDebugMenu = true }, label: {
+                    Text("Actions")
+                        .foregroundColor(.white)
+                        .padding(.vertical, 8)
+                        .frame(maxWidth: .infinity)
+                })
+                .background(Color.blue)
+                List(networkLogger.requests) { request in
+                    NavigationLink(destination:
+                                    NetworkRequestDetailView(
+                                        request: request,
+                                        curlDescription: cURLDescriptionForRequest(request.value),
+                                        copyToClipboard: { UIPasteboard.general.string = $0 })
+                                    .navigationBarTitle("Request #\(request.id)")
+                    ) {
+                        Text("#\(request.id) \(request.value.httpMethod ?? "") \(request.value.url?.absoluteString ?? "")")
+                    }
+                }
+            }
+            .navigationBarTitle("")
+            .navigationBarHidden(true)
         }
-      }
-      .navigationBarTitle("")
-      .navigationBarHidden(true)
+        .actionSheet(isPresented: $isShowingDebugMenu) {
+            ActionSheet(title: Text("Actions"), message: nil, buttons: customActions.map { ActionSheet.Button.default(Text($0.0), action: $0.1) } + [
+                .default(Text("Turn Logging \(networkLogger.isLogging ? "Off" : "On")"), action: networkLogger.toggle),
+                .destructive(Text("Clear"), action: networkLogger.clear),
+                .cancel()
+            ])
+        }
     }
-    .actionSheet(isPresented: $isShowingDebugMenu) {
-      ActionSheet(title: Text("Actions"), message: nil, buttons: customActions.map { ActionSheet.Button.default(Text($0.0), action: $0.1) } + [
-        .default(Text("Turn Logging \(container.isLogging ? "Off" : "On")"), action: container.toggleLogging),
-        .destructive(Text("Clear"), action: container.clear),
-        .cancel()
-      ])
+    
+    private func cURLDescriptionForRequest(_ urlRequest: URLRequest) -> String {
+        return urlRequest.cURLDescription(sessionConfiguration: sessionConfiguration,
+                                          credential: credential,
+                                          authenticationMethod: authenticationMethod)
     }
-  }
-
+    
 }
 
-internal struct NetworkRequestDetailView: View {
-
-  @EnvironmentObject var container: NetworkLoggerViewContainer
-  let request: NogURLRequest
-
-  var body: some View {
-    ScrollView {
-      VStack(alignment: .leading, spacing: 16) {
-        Button(action: copyCurlToClipboard) {
-          Text("Copy cURL")
-            .padding(8)
-            .background(Color.blue)
-            .foregroundColor(.white)
-            .cornerRadius(4)
+public struct NetworkRequestDetailView: View {
+    
+    let request: NogURLRequest
+    let curlDescription: String
+    let copyToClipboard: (_ text: String) -> Void
+    
+    public var body: some View {
+        ScrollView {
+            VStack(alignment: .leading, spacing: 16) {
+                Button(action: { copyToClipboard(curlDescription) }) {
+                    Text("Copy cURL")
+                        .padding(8)
+                        .background(Color.blue)
+                        .foregroundColor(.white)
+                        .cornerRadius(4)
+                }
+                Text(curlDescription)
+                Spacer()
+            }
+            .padding(.horizontal, 16)
+            .padding(.top, 16)
         }
-        Text(container.cURLDescriptionForRequest(request))
-        Spacer()
-      }
-      .padding(.horizontal, 16)
-      .padding(.top, 16)
     }
-  }
-
-  private func copyCurlToClipboard() {
-    UIPasteboard.general.string = container.cURLDescriptionForRequest(request)
-  }
-
+    
 }

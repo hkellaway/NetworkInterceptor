@@ -30,13 +30,10 @@ import SwiftUI
 
 @main
 struct NogDemoApp: App {
-
-    let networkLoggerViewContainer = NetworkLoggerViewContainer(sessionConfiguration: .default)
     
     var body: some Scene {
         WindowGroup {
-          ContentView(container: networkLoggerViewContainer)
-            .environmentObject(networkLoggerViewContainer)
+          ContentView().environmentObject(NetworkLogger())
         }
     }
     

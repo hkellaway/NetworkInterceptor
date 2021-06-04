@@ -25,129 +25,97 @@
 //
 //
 
-import Foundation
+import Combine
+import SwiftUI
 
 // MARK: - NetworkLogger
 
-/// Manages whether network logging is on and reactions to network requests.
-open class NetworkLogger {
-    
-    // MARK: Public properties
+open class NetworkLogger: ObservableObject {
 
-    /// Filters called when a request is logged, giving client a chance to determine whether
-    /// request should be logged or not.
-    public let requestFilters: [RequestFilter]
+  @Published public private(set) var isLogging: Bool = false
+  @Published public private(set) var requests: [NogURLRequest] = []
+  @Published public var verbose = true { didSet { debugLogger.turn(on: verbose) } }
+  
+  public var afterLogRequest: ((URLRequest) -> Void)?
+  public let requestFilters: [RequestFilter]
 
-    /// View where logs are displayed.
-    public private(set) var view: NetworkLogDisplayable! {
-      didSet {
-        (view as? NetworkLoggerViewContainer)?.toggleLogging = self.toggle
-        (view as? NetworkLoggerViewContainer)?.isLogging = isLogging
-      }
+  private var cancellables: Set<AnyCancellable> = []
+  private let swizzle: _NetworkLoggingSwizzle
+  private let debugLogger: ConsoleLogger
+
+  public convenience init(customRequestFilter: RequestFilter? = nil,
+                          debugLogger: ConsoleLogger = ConsoleLogger()) {
+    let requestFilters: [RequestFilter] = [
+      httpOnlyRequestFilter,
+      (customRequestFilter ?? noRequestFilter),
+    ]
+    self.init(requestFilters: requestFilters,
+              swizzle: _InternalNetworkLoggingSwizzle(),
+              debugLogger: debugLogger)
+  }
+
+    internal init(requestFilters: [RequestFilter],
+                  swizzle: _NetworkLoggingSwizzle,
+                  debugLogger: ConsoleLogger) {
+    self.requestFilters = requestFilters
+    self.swizzle = swizzle
+    self.debugLogger = debugLogger
+    self.verbose = true
+
+    NotificationCenter._nog.publisher(for: ._urlProtocolReceivedRequest)
+      .compactMap { $0.object as? URLRequest }
+      .sink(receiveValue: { [weak self] in _ = self?.logRequest($0) })
+      .store(in: &cancellables)
+  }
+
+  public func start() {
+    guard !isLogging else {
+      debugLogger.log("Attempt to `start` while already started. Returning.")
+      return
     }
-    
-    /// Whether network logging is currently on.
-    public private(set) var isLogging = false {
-      didSet {
-        (view as? NetworkLoggerViewContainer)?.isLogging = isLogging
-      }
-    }
+    swizzle.commit()
+    self.isLogging = true
+  }
 
-    /// Whether verbose console logging is on.
-    public var verbose: Bool = true {
-      didSet {
-        console.turn(on: verbose)
-      }
+  public func stop() {
+    guard isLogging else {
+      debugLogger.log("Attempt to `stop` while already stopped. Returning.")
+      return
     }
+    swizzle.undo()
+    self.isLogging = false
+  }
 
-    /// Number of requests made since start.
-    public private(set) var requestCount = 0 {
-      didSet {
-        (view as? ConsoleNetworkLoggerView)?.requestCount = requestCount
-      }
+  public func toggle() {
+    if isLogging {
+      stop()
+    } else {
+      start()
     }
+  }
 
-    // MARK: Private properties
+  public func clear() {
+    requests = []
+  }
 
-    private let adapter: NetworkLoggerUrlProtocolAdapter
-    private let console: ConsoleLogger
-    
-    // MARK: Init/Deinit
+  public func mockRequest() {
+    logRequest(URLRequest(url: URL(string: "https://hello.world")!))
+  }
 
-    public convenience init(filter customRequestFilter: RequestFilter? = nil) {
-        self.init(requestFilters: [
-          httpOnlyRequestFilter,
-          (customRequestFilter ?? noRequestFilter),
-        ])
+  @discardableResult
+  open func logRequest(_ urlRequest: URLRequest) -> Bool {
+    guard isLogging, (requestFilters.reduce(true) { $0 && $1(urlRequest) }) else {
+      return false
     }
-    
-    public init(requestFilters: [RequestFilter],
-                adapter: NetworkLoggerUrlProtocolAdapter = NetworkLoggerUrlProtocolAdapter(),
-                console: ConsoleLogger = ConsoleLogger(),
-                verbose: Bool = true) {
-        self.requestFilters = requestFilters
-        self.adapter = adapter
-        self.console = console
-
-        self.adapter.logRequest = { self.logRequest($0) }
-        self.console.turn(on: verbose)
-        self.attachView(ConsoleNetworkLoggerView(console: console))
-    }
-
-    // MARK: Public instance functions
-    
-    /// Starts recording of network requests.
-    public func start() {
-        guard !isLogging else {
-            console.log("Attempt to `start` while already started. Returning.")
-            return
-        }
-        
-        URLProtocol.registerClass(NetworkLoggerUrlProtocol.self)
-        URLSessionConfiguration._swizzleProtocolClasses()
-        isLogging = true
-    }
-    
-    /// Stops recording of networking requests.
-    public func stop() {
-        guard isLogging else {
-            console.log("Attempt to `stop` while already stopped. Returning.")
-            return
-        }
-        
-        URLProtocol.unregisterClass(NetworkLoggerUrlProtocol.self)
-        URLSessionConfiguration._swizzleProtocolClasses()
-        isLogging = false
-    }
-    
-    public func toggle() {
-        if isLogging {
-            stop()
-        } else {
-            start()
-        }
-    }
-
-    @discardableResult
-    open func logRequest(_ urlRequest: URLRequest) -> Bool {
-      guard isLogging, (requestFilters.reduce(true) { $0 && $1(urlRequest) }) else {
-        return false
-      }
-
-      requestCount = requestCount + 1
-      view.displayRequest(urlRequest)
-      return true
-    }
-
-    open func attachView(_ view: NetworkLogDisplayable) {
-      self.view = view
-    }
+    requests.insert(NogURLRequest(id: requests.count + 1, value: urlRequest), at: 0)
+    afterLogRequest?(urlRequest)
+    return true
+  }
 
 }
 
 // MARK: - ConsoleLogger
 
-/// Prints to console including [Nog] identifier.
 open class ConsoleLogger {
 
   private var isOn = false

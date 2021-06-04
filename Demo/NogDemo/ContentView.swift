@@ -29,46 +29,32 @@ import Nog
 import SwiftUI
 
 struct ContentView: View {
-
-    @State var isLogging = false
+    
+    @EnvironmentObject var networkLogger: NetworkLogger
     @State var isPresentingLog = false
-
-    private let networkLogger: NetworkLogger
-    private let networkLoggerViewContainer: NetworkLoggerViewContainer
-    private let session: URLSession
-
-    init(container: NetworkLoggerViewContainer) {
-      let networkLogger = NetworkLogger()
-      self.networkLogger = networkLogger
-      self.networkLoggerViewContainer = container
-      self.session = URLSession(configuration: container.sessionConfiguration)
-      networkLogger.attachView(container)
-    }
-
+    
+    private let session = URLSession(configuration: .default)
+    
     var body: some View {
         Group {
-            Button("Make Request", action: makeRequest)
+            Button("Make Request", action: {
+                URL(string: "https://api.github.com/zen")
+                    .flatMap { self.session.dataTask(with: URLRequest(url: $0)).resume() }
+            })
             Button("Present Log", action: { isPresentingLog = true })
+                .foregroundColor(networkLogger.isLogging ? Color.green : Color.red)
         }
         .onAppear(perform: networkLogger.toggle)
-        .sheet(isPresented: $isPresentingLog, content: networkLoggerViewContainer.toView)
-    }
-    
-    func makeRequest() {
-        guard let url = URL(string: "https://api.github.com/zen") else {
-            return
-        }
-        self.session.dataTask(with: URLRequest(url: url)).resume()
-    }
-
-    func presentLog() {
-      self.isPresentingLog = true
+        .sheet(isPresented: $isPresentingLog, content: {
+            NetworkLoggerView(customActions: [("Mock Request", networkLogger.mockRequest)])
+                .environmentObject(networkLogger)
+        })
     }
     
 }
 
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
-      ContentView(container: NetworkLoggerViewContainer())
+        ContentView().environmentObject(NetworkLogger())
     }
 }
