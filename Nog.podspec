@@ -1,7 +1,7 @@
 Pod::Spec.new do |s|
 
   s.name             = "Nog"
-  s.version          = "0.2.0"
+  s.version          = "0.3.0"
   s.summary          = "A delicious network request logger in Swift"
   s.description      = "A delicious network request logger in Swift."
   s.homepage         = "https://github.com/hkellaway/Nog"

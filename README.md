@@ -50,38 +50,22 @@ let myNetworkLogger = NetworkLogger(filter: {
 
 ### Displaying Requests
 
-By default, Nog will display requests by printing them to console. If you'd prefer to provide custom UI, simply attach a view that conforms to `NetworkLogDisplayable` (or inherits from `NetworkLoggerViewController`):
+:construction:
 
-``` swift
-let myCustomView: NetworkLogDisplayable = MyNetworkLoggerView()
-let myNetworkLogger = NetworkLogger()
-myNetworkLogger.attachView(myCustomView)
 ```
 
 #### Displaying Requests with SwiftUI
 
-A SwiftUI wrapper for `NetworkLoggerViewController` is provided called `NetworkLoggerView`. Simply present:
 
 ``` swift
-    let networkLogger: NetworkLogger
-    @State var isPresentingLog = false
-    
-    var body: some View {
-        Group {
-            ...
-            Button("Present Log", action: { isPresentingLog = true })
-        }
-        .sheet(isPresented: $isPresentingLog) {
-          NetworkLoggerView(networkLogger: networkLogger)
-        }
-    }
+// :construction:
 ```
 
 #### Displaying Requests in cURL Format
 
 When using `NetworkLoggerViewController`, the cURL representation of requests is right-at-hand.
 
-Simply tap a request to view it's cURL representation. The **Debug** menu can be used to copy the cURL description for the last request viewed
+Simply tap a request to view it's cURL representation then select **Copy cURL**.
 
 ### Advanced Usage
 
@@ -119,18 +103,8 @@ Note: If you still want to filter out only HTTP requests like Nog does by defaul
 
 #### Mocking Requests
 
-In order to mock requests being made, create `NetworkLogger` with a custom instance of `NetworkLoggerUrlProtocolAdapter`:
-
 ``` swift
-class MyNogAdapter: NetworkLoggerUrlProtocolAdapter {
-
-  static var shared = MyNogAdapter()
-
-  func sendMockRequest() {
-    requestReceived(.init(url: URL(string: "https://github.com/helloworld")!))
-  }
-
-}
+// :construction:
 ```
 
 ``` swift
@@ -139,25 +113,9 @@ let myNetworkLogger = NetworkLogger(requestFilters: [httpOnlyRequestFilter], ada
 
 #### Custom NetworkLogger
 
-To fully customize how `NetworkLogger` handles logging requests, create an instance of `NetworkLogger` and override `logRequest(_:)`:
+To fully customize how `NetworkLogger` handles logging requests, ...
 
-``` swift
-class MyNetworkLogger: NetworkLogger {
-
-  @discardableResult
-  override func logRequest(_ urlRequest: URLRequest) -> Result<(), NetworkLoggerError> {
-    print("Hello World \(requestCount) times")
-    return .success(())
-  }
-
-}
-```
-
-``` swift
-let myNetworkLogger: NetworkLogger = MyNetworkLogger()
-```
-
-Note: This will bypass evaluating `requestFilters`.
+:construction:
 
 ## Installation
 
@@ -166,7 +124,6 @@ Note: This will bypass evaluating `requestFilters`.
 Point to the [latest release](https://github.com/hkellaway/Nog/releases) or to the `main` branch for the latest.
 
 ### CocoaPods
-
 
 ```ruby
 pod 'Nog', :git => 'https://github.com/hkellaway/Nog.git', :tag => 'x.x.x'
