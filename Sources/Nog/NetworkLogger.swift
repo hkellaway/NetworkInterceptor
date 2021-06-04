@@ -98,8 +98,8 @@ open class NetworkLogger: ObservableObject {
     requests = []
   }
 
-  public func mockRequest() {
-    logRequest(URLRequest(url: URL(string: "https://hello.world")!))
+  public func mockRequest(urlString: String = "https://hello.world") {
+    logRequest(URLRequest(url: URL(string: urlString)!))
   }
 
   @discardableResult

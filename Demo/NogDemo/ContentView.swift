@@ -46,7 +46,7 @@ struct ContentView: View {
         }
         .onAppear(perform: networkLogger.toggle)
         .sheet(isPresented: $isPresentingLog, content: {
-            NetworkLoggerView(customActions: [("Mock Request", networkLogger.mockRequest)])
+          NetworkLoggerView(customActions: [("Mock Request", { networkLogger.mockRequest() })])
                 .environmentObject(networkLogger)
         })
     }
