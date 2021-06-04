@@ -28,6 +28,7 @@
 import XCTest
 @testable import Nog
 
+@available(iOS 13.0, *)
 class NogTests: XCTestCase {
     
     var sut: TestableNog!
@@ -196,6 +197,7 @@ class NogTests: XCTestCase {
     
 }
 
+@available(iOS 13.0, *)
 class TestableNog: NetworkLogger {
     
     var didCallStart = false

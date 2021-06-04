@@ -11,7 +11,7 @@ Pod::Spec.new do |s|
   s.module_name   = 'Nog'
 
   s.swift_version    = "5.3"
-  s.platforms        = { :ios => "13.0" }
+  s.platforms        = { :ios => "12.0" }
   s.requires_arc     = true
 
   s.source_files     = 'Sources/Nog/*.swift'

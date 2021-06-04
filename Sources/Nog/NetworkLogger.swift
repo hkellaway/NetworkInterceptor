@@ -30,6 +30,7 @@ import SwiftUI
 
 // MARK: - NetworkLogger
 
+@available(iOS 13.0, *)
 open class NetworkLogger: ObservableObject {
 
   @Published public private(set) var isLogging: Bool = false

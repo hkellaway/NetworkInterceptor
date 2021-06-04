@@ -27,6 +27,7 @@
 
 import SwiftUI
 
+@available(iOS 13.0, *)
 public struct NetworkLoggerView: View {
     
     @EnvironmentObject var networkLogger: NetworkLogger
@@ -90,6 +91,7 @@ public struct NetworkLoggerView: View {
     
 }
 
+@available(iOS 13.0, *)
 public struct NetworkRequestDetailView: View {
     
     let request: NogURLRequest
