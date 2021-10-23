@@ -1,10 +1,10 @@
 name: Build
 on: 
   push:
-    branches: [main, next]
+    branches: [ main, next ]
 jobs:
   build:
-    runs-on: [macos-latest]
+    runs-on: [  macos-latest ]
     env:
       XC_VERSION: ${{ '12.4' }}
       XC_PROJ: ${{ 'Nog.xcodeproj' }}
